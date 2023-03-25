@@ -1,0 +1,34 @@
+[
+	{
+		"title": "Lata de Coca-Cola.",
+		"description": "Bebida gaseosa enlatada con azúcar y colorante. Sabor cola.",
+		"price": 350,
+		"thumbnail": "img/thumbnails/coke",
+		"code": 1,
+		"stock": 20
+	},
+	{
+		"title": "Paquete de papas Lays.",
+		"description": "Paquete de papas sabor clásico. 23 gramos.",
+		"price": 600,
+		"thumbnail": "img/thumbnails/lays",
+		"code": 3,
+		"stock": 15
+	},
+	{
+		"title": "Alfajor Fantoche doble.",
+		"description": "Alfajor sabor chocolate.",
+		"price": 150,
+		"thumbnail": "img/thumbnails/alfajorFantoche",
+		"code": 4,
+		"stock": 25
+	},
+	{
+		"title": "Sugus Confitados.",
+		"description": "Caja pequeña de confites azucarados de múltiples sabores.",
+		"price": 300,
+		"thumbnail": "img/thumbnails/sugusConf",
+		"code": 5,
+		"stock": 8
+	}
+]
