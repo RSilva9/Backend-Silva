@@ -8,6 +8,14 @@
 		"stock": 20
 	},
 	{
+		"title": "Botella de agua Villvicencio.",
+		"description": "Agua sin gas envasada.",
+		"price": 300,
+		"thumbnail": "img/thumbnails/villaVic",
+		"code": 2,
+		"stock": 30
+	},
+	{
 		"title": "Paquete de papas Lays.",
 		"description": "Paquete de papas sabor clásico. 23 gramos.",
 		"price": 600,

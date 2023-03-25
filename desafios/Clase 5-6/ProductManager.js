@@ -84,4 +84,4 @@ console.log("\n--------------------------------- TODOS LOS PRODUCTOS\n", product
 productManager.updateProduct(4, [ "stock", "title", "price" ], [ 25, "Alfajor Fantoche doble.", 150])
 console.log(productManager.getProductById(4))
 productManager.deleteProduct(2)
-console.log("\n--------------------------------- TODOS LOS PRODUCTOS TRAS ELIMINAR PRODUCTO CON ID 5\n", productManager.getProducts())
+console.log("\n--------------------------------- TODOS LOS PRODUCTOS TRAS ELIMINAR PRODUCTO CON ID 2\n", productManager.getProducts())
