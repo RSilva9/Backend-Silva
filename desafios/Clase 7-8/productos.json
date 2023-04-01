@@ -8,7 +8,7 @@
 		"stock": 20
 	},
 	{
-		"title": "Botella de agua Villvicencio.",
+		"title": "Botella de agua Villavicencio.",
 		"description": "Agua sin gas envasada.",
 		"price": 300,
 		"thumbnail": "img/thumbnails/villaVic",
@@ -38,5 +38,13 @@
 		"thumbnail": "img/thumbnails/sugusConf",
 		"code": 5,
 		"stock": 8
+	},
+	{
+		"title": "Baggio de manzana.",
+		"description": "Jugo envasado en cartón sabor manzana.",
+		"price": 210,
+		"thumbnail": "img/thumbnails/baggioManz",
+		"code": 6,
+		"stock": 6
 	}
 ]
