@@ -1,0 +1,57 @@
+[
+	{
+		"id": 1,
+		"title": "Sugus Confitados",
+		"description": "Confites azucarados multifruta",
+		"code": "A1234",
+		"price": 200,
+		"status": true,
+		"stock": 15,
+		"category": "Caramelos",
+		"thumbnail": "/img/thumbnails/sugus"
+	},
+	{
+		"id": 2,
+		"title": "Marroc Felfort",
+		"description": "Bocadito Marroc de chocolate",
+		"code": "B1532",
+		"price": 180,
+		"status": true,
+		"stock": 10,
+		"category": "Chocolates",
+		"thumbnail": "/img/thumbnails/marroc"
+	},
+	{
+		"id": 3,
+		"title": "Agua Villavicencio",
+		"description": "Agua mineral sin gas",
+		"code": "C4432",
+		"price": 300,
+		"status": true,
+		"stock": 30,
+		"category": "Bebidas",
+		"thumbnail": "/img/thumbnails/aguavillavicencio"
+	},
+	{
+		"id": 5,
+		"title": "Billiken yogur banana",
+		"description": "Caramelo sabor yogur de banana",
+		"code": "D3333",
+		"price": 30,
+		"status": true,
+		"stock": 100,
+		"category": "Caramelos",
+		"thumbnail": "/img/thumbnails/billikenyogban"
+	},
+	{
+		"id": 6,
+		"title": "Chicle Beldent Menta",
+		"description": "Chicle masticable sabor menta",
+		"code": "C1133",
+		"price": 300,
+		"status": true,
+		"stock": 25,
+		"category": "Chicles",
+		"thumbnail": "/img/thumbnails/beldentMenta"
+	}
+]
