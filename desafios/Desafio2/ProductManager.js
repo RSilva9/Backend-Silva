@@ -2,7 +2,7 @@ import fs from 'fs';
 
 class ProductManager{
     constructor(){
-        this.path = './desafios/Clase 5-6/productos.json'
+        this.path = './desafios/Desafio2/productos.json'
         this.products = []
     }
 
