@@ -36,7 +36,7 @@ class CartManager{
                 found = p
             }
         })
-        return found;
+        return found.products;
     }
 
     addCart = () =>{
