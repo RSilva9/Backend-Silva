@@ -53,5 +53,16 @@
 		"stock": 25,
 		"category": "Chicles",
 		"thumbnail": "/img/thumbnails/beldentMenta"
+	},
+	{
+		"id": 7,
+		"title": "Mogul Ositos Extreme",
+		"description": "Ositos de goma dulces con sabor ácido",
+		"code": "G7752",
+		"price": "300",
+		"status": true,
+		"stock": "10",
+		"category": "Caramelos",
+		"thumbnail": "/img/thumbnails/mogulXtreme"
 	}
 ]

@@ -1,12 +1,14 @@
 import { Router } from "express";
-import productManager from '../js/ProductManager.js'
+import productManager from '../managersJS/ProductManager.js'
 
 const productRouter = Router()
 const allProducts = productManager.getProducts()
 
 productRouter.get('/', (req, res)=>{
-    let limite = +req.query.limit
-    res.send(productManager.getProducts(limite))
+
+    res.render('index', {})
+    // let limite = +req.query.limit
+    // res.send(productManager.getProducts(limite))
 })
 
 productRouter.get('/:pid', (req, res)=>{
