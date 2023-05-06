@@ -1,5 +1,5 @@
 import fs from 'fs';
-import dataProductos from '../json/productos.json' assert { type: 'json' };
+import dataProductos from '../../json/productos.json' assert { type: 'json' };
 
 class CartManager{
     constructor(){
