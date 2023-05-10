@@ -15,9 +15,9 @@ class ProductManager{
         return id;
     }
 
-    getProducts = async()=>{
+    getProducts = async(limit, page, query, sort)=>{
         try{
-            return await productModel.find({}).lean()
+            return await productModel.paginate(query, {limit: limit, page: page, sort: sort})
         }catch(err){
             return new Error(err)
         }
@@ -59,7 +59,7 @@ class ProductManager{
                     producto[keys[i]] = values[i]
                 }
             }
-            return await productModel.updateOne({id: pid}, producto)
+            await productModel.updateOne({id: pid}, producto)
         }catch(err){
             return new Error(err)
         }

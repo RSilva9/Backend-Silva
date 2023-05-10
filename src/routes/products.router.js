@@ -1,21 +1,25 @@
 import { Router } from "express";
 import { productManager } from '../dao/managersMongo/ProductManager.js'
 
-const productRouter = Router()
+export const productRouter = Router()
 
 productRouter.get('/', async(req, res)=>{
-    try{
-        const products = await productManager.getProducts()
-        const limit = +req.query.limit
-        var finalArray = []
-        if(limit){
-            finalArray = products.slice(0, limit)
-            res.render('realTimeProducts', {finalArray})
-        }else{
-            finalArray = products
-            res.render('realTimeProducts', {finalArray})
-        }      
-    }catch(error){
+    try {
+        var limit = +req.query.limit
+        var page = +req.query.page
+        var query = req.query.query
+        var sort = req.query.sort
+        if(!limit) limit = 10
+        if(query) query = JSON.parse(query)
+        if(sort) sort = JSON.parse(sort)
+
+        const products = await productManager.getProducts(limit,page,query,sort)
+        res.status(200).send({
+            status: 'success',
+            payload: products
+        })
+
+    } catch (error) {
         res.status(400).send({status: 'error', message: error.message})
     }
 })
@@ -23,13 +27,15 @@ productRouter.get('/', async(req, res)=>{
 productRouter.get('/:pid', async(req, res)=>{
     try {
         const product = await productManager.getProductById(+req.params.pid)
-        if(product){
-            const finalArray = [product]
-            res.render('realTimeProducts', {finalArray})
-        }else{
-            res.send("Producto no encontrado.")
-        }
-        
+        product ?
+        res.status(200).send({
+            status: 'success',
+            payload: product
+        })
+        :
+        res.status(404).send({
+            status: 'Producto no encontrado.',
+        })
     } catch (error) {
         res.status(400).send({status: 'error', message: error.message})
     }
@@ -38,7 +44,7 @@ productRouter.get('/:pid', async(req, res)=>{
 productRouter.post('/', async(req, res)=>{
     try {
         const {title, description, code, price, stock, category, thumbnail} = req.body
-        const products = await productManager.getProducts()
+        var products = await productManager.getProducts()
         let id
         if(products.length === 0){
             id = 1
@@ -47,7 +53,9 @@ productRouter.post('/', async(req, res)=>{
         }
         if(title, description, code, price, stock, category, thumbnail){
             await productManager.addProduct(id, title, description, code, +price, +stock, category, thumbnail)
-            res.redirect('/')
+            res.status(200).send({
+                status: `Nuevo producto agregado con id ${id}`,
+            })
         }else{
             res.send("Debe completar todos los campos")
         }
@@ -58,11 +66,26 @@ productRouter.post('/', async(req, res)=>{
 })
 
 productRouter.put('/:pid', async(req, res)=>{
-    res.redirect('/')
+    try {
+        const updProd = req.body
+        productManager.updateProduct(req.params.pid, Object.keys(updProd), Object.values(updProd))
+        res.status(200).send({
+            status: `Producto actualizado (id: ${req.params.pid}). Datos actualizados: ${JSON.stringify(updProd)}`,
+        })
+    } catch (error) {
+        res.status(400).send({status: 'error', message: error.message})
+    }
+    
 })
 
-// productRouter.delete('/:pid', (req, res)=>{
-//     productManager.deleteProduct(+req.params.pid)
-// })
-
-export default productRouter;
+productRouter.delete('/:pid', async (req, res)=>{
+    try {
+        await productManager.deleteProduct(req.params.pid)
+        res.status(200).send({
+            status: `Producto eliminado (id: ${req.params.pid})`,
+        })
+    } catch (error) {
+        res.status(400).send({status: 'error', message: error.message})
+    }
+    
+})

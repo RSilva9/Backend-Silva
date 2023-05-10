@@ -1,41 +1,15 @@
 <div id="prodContainer" class="d-flex flex-row flex-wrap">
-    {{#each finalArray}}
+    {{#each products}}
         <div class="card m-1" style="width: 18rem">
             <div class="card-body">
                 <h5 class="card-title">{{this.title}}</h5>
                 <h6 class="card-subtitle mb-2 text-body-secondary">Disponibles: {{this.stock}}</h6>
                 <p class="card-text">{{this.description}}</p>
-                <div class="d-flex justify-content-between">
-                    <h4>${{this.price}}</h4>
-                    <button id="btnDelete" data-id="{{this.id}}">Borrar</button>
-                </div>
-                
+                <h4>${{this.price}}</h4>
             </div>
         </div>
     {{/each}}
 </div>
-<hr>
-
-<div class="d-flex justify-content-center">
-    <form name="productForm" action="/" method="POST">
-        <label for="title">Title:</label><br>
-        <input type="text" id="title" name="title"><br>
-        <label for="description">Description:</label><br>
-        <input type="text" id="description" name="description"><br>
-        <label for="code">Code:</label><br>
-        <input type="text" id="code" name="code"><br>
-        <label for="price">Price:</label><br>
-        <input type="text" id="price" name="price"><br>
-        <label for="stock">Stock:</label><br>
-        <input type="text" id="stock" name="stock"><br>
-        <label for="category">Category:</label><br>
-        <input type="text" id="category" name="category"><br>
-        <label for="thumbnail">Thumbnail:</label><br>
-        <input type="text" id="thumbnail" name="thumbnail"><br>
-        <input type="submit" id="submitProduct"></input>
-    </form>
-</div>
-
 
 <script src="/socket.io/socket.io.js"></script>
 <script src="../index.js" type="module"></script>
