@@ -4,17 +4,7 @@ class ProductManager{
     constructor(model){
         this.productModel = model
     }
-
-    generateId = () => {
-        let id
-        if(this.productModel.length === 0){
-            id = 1
-        }else{
-            id = this.productModel[this.productModel.length-1].id + 1
-        }
-        return id;
-    }
-
+    
     getProducts = async(limit, page, query, sort)=>{
         try{
             return await productModel.paginate(query, {limit: limit, page: page, sort: sort})

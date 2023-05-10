@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { productManager } from '../dao/managersMongo/ProductManager.js'
+import { cartManager } from '../dao/managersMongo/CartManager.js'
 import { productModel } from "../dao/models/products.model.js";
 import { cartModel } from "../dao/models/carts.model.js";
 
@@ -11,7 +11,18 @@ viewsRouter.get('/productos', async(req, res)=>{
 })
 
 viewsRouter.get('/carts/:cid', async(req, res)=>{
-    var cart = await cartModel.find({"id": req.params.cid})
+    const cid = req.params.cid
+    let cart = await cartModel.findOne({id: cid}).lean()
+    let cartProducts = cart.products
+    const cartProductsArray = []
+    cartProducts.forEach(prod=>{
+        cartProductsArray.push(prod)
+    })
     console.log(cart)
-    res.render('carts', {cart})
+    console.log(cartProductsArray)
+    const data = {
+        cart: cart,
+        cartProductsArray: cartProductsArray
+    }
+    res.render('carts', data)
 })

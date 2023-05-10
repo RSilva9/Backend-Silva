@@ -3,8 +3,13 @@
         <div class="card-body">
             <h5 class="card-title">ID del carrito: {{cart.id}}</h5>
             <ul>
-                {{#each cart.products}}
-                    <li>{{this.id}}</li>
+                {{#each cartProductsArray}}
+                    <li>
+                        <div class="d-flex flex-column">
+                            <h5>Producto: {{this.product.title}}</h5>
+                            <p>Precio: ${{this.product.price}} - Cantidad: {{this.quantity}}</p>
+                        </div>
+                    </li>
                 {{/each}}
             </ul>
         </div>

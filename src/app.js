@@ -6,6 +6,8 @@ import { productRouter } from './routes/products.router.js'
 import { viewsRouter } from './routes/views.router.js'
 import { chatRouter } from './routes/chat.router.js';
 import { cartRouter } from './routes/carts.router.js'
+import { cartManager } from './dao/managersMongo/CartManager.js';
+import { productManager } from './dao/managersMongo/ProductManager.js';
 import { Server } from 'socket.io';
 import mongoose from 'mongoose';
 import {messageModel} from './dao/models/messages.model.js'
@@ -40,11 +42,15 @@ socketServer.on('connection', socket=>{
     console.log("Nuevo cliente conectado.")
     
     let arrayMensajes = [];
-
     socket.on('userMessage', data =>{
         const newMessage = {email: data.email, content: data.message, dateSent: data.dateSent}
         arrayMensajes.push(newMessage)
         messageModel.create(newMessage)
         socketServer.emit('mensajesCargados', {arrayMensajes});
+    })
+
+    socket.on('addToCart', async(pid, cid)=>{
+        const product = await productManager.getProductById(pid)
+        await cartManager.updateCart(cid, product._id, product.id)
     })
 })
