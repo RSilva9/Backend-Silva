@@ -1,41 +1,20 @@
 <div id="prodContainer" class="d-flex flex-row flex-wrap">
-    {{#each finalArray}}
+    {{#each products}}
         <div class="card m-1" style="width: 18rem">
             <div class="card-body">
-                <h5 class="card-title">{{this.title}}</h5>
-                <h6 class="card-subtitle mb-2 text-body-secondary">Disponibles: {{this.stock}}</h6>
-                <p class="card-text">{{this.description}}</p>
-                <div class="d-flex justify-content-between">
+                <h4 class="card-title">{{this.title}}</h4>
+                <h5 class="card-subtitle mb-2 text-body-secondary">Disponibles: {{this.stock}}</h5>
+                <h6 class="card-text">{{this.description}}</h6>
+                <p>Categoría: {{this.category}}</p>
+                <div class="d-flex flex-row justify-content-between">
                     <h4>${{this.price}}</h4>
-                    <button id="btnDelete" data-id="{{this.id}}">Borrar</button>
+                    <button id="addToCart" data-id="{{this.id}}">Añadir al carrito</button>
                 </div>
-                
             </div>
         </div>
     {{/each}}
 </div>
-<hr>
 
-<div class="d-flex justify-content-center">
-    <form name="productForm" action="/" method="POST">
-        <label for="title">Title:</label><br>
-        <input type="text" id="title" name="title"><br>
-        <label for="description">Description:</label><br>
-        <input type="text" id="description" name="description"><br>
-        <label for="code">Code:</label><br>
-        <input type="text" id="code" name="code"><br>
-        <label for="price">Price:</label><br>
-        <input type="text" id="price" name="price"><br>
-        <label for="stock">Stock:</label><br>
-        <input type="text" id="stock" name="stock"><br>
-        <label for="category">Category:</label><br>
-        <input type="text" id="category" name="category"><br>
-        <label for="thumbnail">Thumbnail:</label><br>
-        <input type="text" id="thumbnail" name="thumbnail"><br>
-        <input type="submit" id="submitProduct"></input>
-    </form>
-</div>
-
-
+<script src=" https://cdn.jsdelivr.net/npm/sweetalert2@11.7.1/dist/sweetalert2.all.min.js "></script>
 <script src="/socket.io/socket.io.js"></script>
 <script src="../index.js" type="module"></script>

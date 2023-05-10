@@ -1,0 +1,17 @@
+<div id="prodContainer" class="d-flex flex-row flex-wrap">
+    <div class="card m-1" style="width: 18rem">
+        <div class="card-body">
+            <h5 class="card-title">ID del carrito: {{cart.id}}</h5>
+            <ul>
+                {{#each cartProductsArray}}
+                    <li>
+                        <div class="d-flex flex-column">
+                            <h5>Producto: {{this.product.title}}</h5>
+                            <p>Precio: ${{this.product.price}} - Cantidad: {{this.quantity}}</p>
+                        </div>
+                    </li>
+                {{/each}}
+            </ul>
+        </div>
+    </div>
+</div>

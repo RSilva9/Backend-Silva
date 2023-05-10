@@ -1,29 +1,22 @@
 const socketClient = io()
 
 const prodContainer = document.getElementById("prodContainer")
-const productForm = document.getElementById("productForm")
-const btnDelete = document.querySelectorAll("#btnDelete")
+const BtnAddToCart = document.querySelectorAll("#addToCart")
+var numCarrito
 
-if(window.location.href.match(/\/\d+$/)) {
-    document.getElementById("submitProduct").addEventListener("click", (evt)=>{
-        evt.preventDefault()
-        const productId = window.location.href.split('/').pop()
-        const inputKeys = [] 
-        const inputValues = []
-        const inputs = document.forms["productForm"].getElementsByTagName("input")
-        for(let item of inputs){
-            if(item != ""){
-                inputKeys.push(item.name)
-                inputValues.push(item.value)
-            }
-        }
-        socketClient.emit('sendProductValues', productId, inputKeys, inputValues)
-    })
-}
-
-btnDelete.forEach(btn=>{
+BtnAddToCart.forEach(btn=>{
     btn.addEventListener("click", ()=>{
-        socketClient.emit('deleteProduct', btn.dataset.id)
-        window.location.reload()
+        Swal.fire({
+            title: 'Elije el ID de carrito.',
+            input: 'text',
+            inputPlaceholder: 'ID carrito',
+            inputValidator: (value) => {
+                return !value && 'Introduce un ID válido.'
+            },
+            allowOutsideClick: false,
+        }).then(result => {
+            numCarrito = result.value
+            socketClient.emit('addToCart', btn.dataset.id, numCarrito)
+        })
     })
 })
