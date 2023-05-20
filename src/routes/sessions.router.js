@@ -11,7 +11,13 @@ function auth(req, res, next){
 }
 
 sessionRouter.get('/register', (req, res)=>{
-    res.render('register', {})
+    if(req.session.user){
+        return res.status(401).render('base', {
+            error: 'Ya estás logueado.'
+        })
+    }else{
+        res.render('register', {})
+    }
 })
 
 sessionRouter.post('/register', async (req, res)=>{
@@ -22,8 +28,16 @@ sessionRouter.post('/register', async (req, res)=>{
 })
 
 sessionRouter.get('/login', (req, res)=>{
-    res.render('login', {})
+    if(req.session.user){
+        return res.status(401).render('base', {
+            error: 'Ya estás logueado.'
+        })
+    }else{
+        res.render('login', {})
+    }
 })
+
+var userSession
 
 sessionRouter.post('/login', async (req, res)=>{
     const { email, password } = req.body
@@ -44,6 +58,7 @@ sessionRouter.post('/login', async (req, res)=>{
         user,
         role
     }
+    userSession = req.session.user
     res.redirect('../productos')
 })
 
@@ -60,3 +75,7 @@ sessionRouter.get('/profile', auth, async(req, res)=>{
     const data = req.session.user
     res.render('profile', {data})
 })
+
+sessionRouter.get('/check-login', auth, (req, res) => {
+    res.status(200).send('Usuario logueado');
+});

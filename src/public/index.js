@@ -3,6 +3,7 @@ const socketClient = io()
 const prodContainer = document.getElementById("prodContainer")
 const BtnAddToCart = document.querySelectorAll("#addToCart")
 const BtnLogout = document.getElementById("btnLogout")
+const BtnInicio = document.getElementById("btnInicio")
 var numCarrito
 
 BtnAddToCart.forEach(btn=>{
@@ -22,6 +23,10 @@ BtnAddToCart.forEach(btn=>{
     })
 })
 
-BtnLogout.addEventListener("click", ()=>{
-    window.location.replace("/sessions/logout")
-})
+BtnLogout.onclick = ()=>{
+    window.location.href = "/sessions/logout"
+}
+
+BtnInicio.onclick = ()=>{
+    window.location.href = "/"
+}

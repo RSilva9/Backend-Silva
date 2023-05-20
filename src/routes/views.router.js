@@ -27,15 +27,21 @@ viewsRouter.get('/productos', auth, async(req, res)=>{
 
 viewsRouter.get('/carts/:cid', auth, async(req, res)=>{
     const cid = req.params.cid
-    let cart = await cartModel.findOne({id: cid}).lean()
-    let cartProducts = cart.products
-    const cartProductsArray = []
-    cartProducts.forEach(prod=>{
-        cartProductsArray.push(prod)
-    })
-    const data = {
-        cart: cart,
-        cartProductsArray: cartProductsArray
+    const carts = await cartModel.find({}).sort({}).limit(100).lean()
+    if(+cid < 1 || +cid > carts.length){
+        return res.status(401).send('Carrito no encontrado')
+    }else{
+        let cart = await cartModel.findOne({id: cid}).lean()
+        let cartProducts = cart.products
+        const cartProductsArray = []
+        cartProducts.forEach(prod=>{
+            cartProductsArray.push(prod)
+        })
+        const data = {
+            cart: cart,
+            cartProductsArray: cartProductsArray,
+            user: req.session.user
+        }
+        res.render('carts', data)
     }
-    res.render('carts', data)
 })

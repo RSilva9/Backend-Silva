@@ -17,8 +17,6 @@ import session from 'express-session';
 import FileStore from 'session-file-store';
 import MongoStore from 'connect-mongo';
 
-const fileStorage = FileStore(session)
-
 var app = express()
 const httpServer = app.listen(8080, ()=>{ console.log("Server Up.") })
 export const socketServer = new Server(httpServer)
