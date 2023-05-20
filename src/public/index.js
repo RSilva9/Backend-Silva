@@ -2,6 +2,7 @@ const socketClient = io()
 
 const prodContainer = document.getElementById("prodContainer")
 const BtnAddToCart = document.querySelectorAll("#addToCart")
+const BtnLogout = document.getElementById("btnLogout")
 var numCarrito
 
 BtnAddToCart.forEach(btn=>{
@@ -19,4 +20,8 @@ BtnAddToCart.forEach(btn=>{
             socketClient.emit('addToCart', btn.dataset.id, numCarrito)
         })
     })
+})
+
+BtnLogout.addEventListener("click", ()=>{
+    window.location.replace("/sessions/logout")
 })

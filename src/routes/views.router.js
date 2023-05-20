@@ -5,12 +5,27 @@ import { cartModel } from "../dao/models/carts.model.js";
 
 export const viewsRouter = Router()
 
-viewsRouter.get('/productos', async(req, res)=>{
-    const products = await productModel.find({}).sort({}).limit(10).lean()
-    res.render('realTimeProducts', {products})
+function auth(req, res, next){
+    if(req.session.user){
+        return next()
+    }
+    return res.status(401).send('Error de autorización.')
+}
+
+viewsRouter.get('/', async(req, res)=>{
+    res.render('inicio')
 })
 
-viewsRouter.get('/carts/:cid', async(req, res)=>{
+viewsRouter.get('/productos', auth, async(req, res)=>{
+    const products = await productModel.find({}).sort({}).limit(10).lean()
+    const data = {
+        products: products,
+        user: req.session.user
+    }
+    res.render('realTimeProducts', data)
+})
+
+viewsRouter.get('/carts/:cid', auth, async(req, res)=>{
     const cid = req.params.cid
     let cart = await cartModel.findOne({id: cid}).lean()
     let cartProducts = cart.products
@@ -18,8 +33,6 @@ viewsRouter.get('/carts/:cid', async(req, res)=>{
     cartProducts.forEach(prod=>{
         cartProductsArray.push(prod)
     })
-    console.log(cart)
-    console.log(cartProductsArray)
     const data = {
         cart: cart,
         cartProductsArray: cartProductsArray

@@ -1,0 +1,53 @@
+
+<style>
+    body {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 100vh;
+        margin: 0;
+    }
+
+    .container {
+        text-align: center;
+    }
+
+    button {
+        padding: 10px 20px;
+        font-size: 16px;
+        background-color: #5c8bd1;
+        color: #ffffff;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        margin: 5px;
+        transition: 0.5s;
+    }
+
+    button:hover {
+        background-color: #3d70bb;
+    }
+</style>
+
+<div class="container">
+    <button type="button" id="btnLogin">Iniciar sesión</button>
+    <button type="button" id="btnRegister">Registrarse</button>
+    <button type="button" id="btnProfile">Perfil</button>
+</div>
+
+<script type="module">
+    const btnLogin = document.getElementById("btnLogin")
+    const btnRegister = document.getElementById("btnRegister")
+    const btnProfile = document.getElementById("btnProfile")
+
+    btnLogin.onclick = ()=>{
+        window.location.replace("/sessions/login")
+    }
+    btnRegister.onclick = ()=>{
+        window.location.replace("/sessions/register")
+    }
+    btnProfile.onclick = ()=>{
+        window.location.replace("/sessions/profile")
+    }
+
+</script>
