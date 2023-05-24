@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { userModel } from '../dao/models/users.model.js'
+import passport from 'passport';
 
 export const sessionRouter = Router()
 
@@ -20,11 +20,13 @@ sessionRouter.get('/register', (req, res)=>{
     }
 })
 
-sessionRouter.post('/register', async (req, res)=>{
-    const newUser = req.body
-    const user = new userModel(newUser)
-    await user.save()
+sessionRouter.post('/register', passport.authenticate('register', {failureRedirect:'/failRegister'}), async (req, res)=>{
     res.redirect('./login')
+})
+
+sessionRouter.get('/failRegister', async(req, res)=>{
+    console.log("Failed Strategy")
+    res.send({error: "Failed"})
 })
 
 sessionRouter.get('/login', (req, res)=>{
@@ -38,28 +40,30 @@ sessionRouter.get('/login', (req, res)=>{
 })
 
 var userSession
-
-sessionRouter.post('/login', async (req, res)=>{
-    const { email, password } = req.body
-    const user = await userModel.findOne({ email, password }).lean().exec()
-    if(!user){
+sessionRouter.post('/login', passport.authenticate('login', {failureRedirect:'failLogin'}), async (req, res)=>{
+    if(!req.user){
         return res.status(401).render('base', {
             error: 'Email o contraseña incorrectos.'
         })
     }
-
-    var role
-    if(email === "adminCoder@coder.com" && password === "adminCod3r123"){
-        role = "admin"
-    }else{
-        role = "usuario"
-    }
     req.session.user = {
-        user,
-        role
+        first_name: req.user.first_name,
+        last_name: req.user.last_name,
+        age: req.user.age,
+        email: req.user.email,
+        role: req.user.role
     }
     userSession = req.session.user
     res.redirect('../productos')
+})
+
+sessionRouter.get('/failLogin', async(req, res)=>{
+    res.send({error: "Failed Login"})
+})
+
+sessionRouter.get('/githubcallback', passport.authenticate('github', {failureRedirect: '/login'}), async(req, res)=>{
+    req.session.user = req.user
+    res.redirect('/')
 })
 
 sessionRouter.get('/logout', (req, res)=>{
@@ -69,11 +73,6 @@ sessionRouter.get('/logout', (req, res)=>{
         })
         else res.redirect('../')
     })
-})
-
-sessionRouter.get('/profile', auth, async(req, res)=>{
-    const data = req.session.user
-    res.render('profile', {data})
 })
 
 sessionRouter.get('/check-login', auth, (req, res) => {

@@ -10,7 +10,8 @@ const userSchema = new mongoose.Schema({
         unique: true
     },
     age: Number,
-    password: String
+    password: String,
+    role: String
 })
 
 export const userModel = mongoose.model(userCollection, userSchema);

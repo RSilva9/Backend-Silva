@@ -2,7 +2,7 @@ import express from 'express';
 import __dirname from './utils.js';
 import path from 'path';
 import handlebars from 'express-handlebars';
-import { productRouter } from './routes/products.router.js'
+import { productRouter } from './routes/products.router.js';
 import { viewsRouter } from './routes/views.router.js'
 import { chatRouter } from './routes/chat.router.js';
 import { cartRouter } from './routes/carts.router.js'
@@ -11,11 +11,12 @@ import { cartManager } from './dao/managersMongo/CartManager.js';
 import { productManager } from './dao/managersMongo/ProductManager.js';
 import { Server } from 'socket.io';
 import mongoose from 'mongoose';
-import {messageModel} from './dao/models/messages.model.js'
+import {messageModel} from './dao/models/messages.model.js';
 import cookieParser from 'cookie-parser';
 import session from 'express-session';
-import FileStore from 'session-file-store';
 import MongoStore from 'connect-mongo';
+import passport from 'passport';
+import initializePassport from './passport.config.js'
 
 var app = express()
 const httpServer = app.listen(8080, ()=>{ console.log("Server Up.") })
@@ -35,6 +36,9 @@ app.use(session({
     resave: true,
     saveUnitialized: false
 }))
+initializePassport()
+app.use(passport.initialize())
+app.use(passport.session())
 
 app.use(express.static(__dirname+'/public'))
 app.use(express.urlencoded({extended:true}))

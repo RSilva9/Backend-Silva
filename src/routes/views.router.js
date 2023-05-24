@@ -45,3 +45,8 @@ viewsRouter.get('/carts/:cid', auth, async(req, res)=>{
         res.render('carts', data)
     }
 })
+
+viewsRouter.get('/profile', auth, async(req, res)=>{
+    const data = req.session.user
+    res.render('profile', {data})
+})
