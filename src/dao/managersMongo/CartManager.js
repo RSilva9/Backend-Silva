@@ -5,6 +5,32 @@ class CartManager{
         this.cartModel = model
     }
 
+    getCarts = async()=>{
+        try {
+            const carts = await cartModel.find({})
+            if(carts){
+                return carts
+            }
+            console.log("No carts in collection.")
+        } catch (error) {
+            return error
+        }
+    }
+
+    generateId = async()=>{
+        try {
+            const carts = await cartModel.find({})
+            if(carts && carts.length > 0){
+                return carts[carts.length-1].id + 1
+            }
+            else{
+                return 1
+            }
+        } catch (error) {
+            return error
+        }
+    }
+
     getCartById = async(cid)=>{
         try{
             return await cartModel.findOne({id: cid}).lean()
@@ -16,7 +42,7 @@ class CartManager{
     createCart = async(id)=>{
         try{
             const newCart = {
-                id: id,
+                id: await this.generateId(),
             }
             return await cartModel.create(newCart)
         }catch(err){

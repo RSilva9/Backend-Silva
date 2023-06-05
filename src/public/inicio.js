@@ -29,20 +29,18 @@ btnProfile.onclick = ()=>{
 btnProducts.onclick = ()=>{
     window.location.href = "/productos"
 }
-btnCarts.onclick = ()=>{
-    var numCarrito
-    Swal.fire({
-        title: 'Elije el ID de carrito.',
-        input: 'number',
-        inputPlaceholder: 'ID carrito',
-        inputValidator: (value) => {
-            return !value && 'Introduce un ID válido.'
-        },
-        allowOutsideClick: false,
-    }).then(result => {
-        numCarrito = result.value
-        window.location.href = `/carts/${numCarrito}`
-    })
+btnCarts.onclick = async()=>{
+    try {
+        const response = await fetch('/sessions/getCartId')
+        if(!response.ok){
+            throw new Error("Unable to get cart ID")
+        }
+        const data = await response.json()
+        const cartId = await data.cartId
+        window.location.href = `/carts/${cartId}`
+    } catch (error) {
+        console.error(error)
+    }
 }
 btnLogout.onclick = ()=>{
     window.location.href = "/sessions/logout"

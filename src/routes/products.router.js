@@ -34,7 +34,7 @@ productRouter.get('/:pid', async(req, res)=>{
         })
         :
         res.status(404).send({
-            status: 'Producto no encontrado.',
+            status: 'Product not found.',
         })
     } catch (error) {
         res.status(400).send({status: 'error', message: error.message})
@@ -54,10 +54,10 @@ productRouter.post('/', async(req, res)=>{
         if(title, description, code, price, stock, category, thumbnail){
             await productManager.addProduct(id, title, description, code, +price, +stock, category, thumbnail)
             res.status(200).send({
-                status: `Nuevo producto agregado con id ${id}`,
+                status: `New product added with id: ${id}`,
             })
         }else{
-            res.send("Debe completar todos los campos")
+            res.send("Please, fill all the fields.")
         }
         
     } catch (error) {
@@ -70,7 +70,7 @@ productRouter.put('/:pid', async(req, res)=>{
         const updProd = req.body
         productManager.updateProduct(req.params.pid, Object.keys(updProd), Object.values(updProd))
         res.status(200).send({
-            status: `Producto actualizado (id: ${req.params.pid}). Datos actualizados: ${JSON.stringify(updProd)}`,
+            status: `Product updated (id: ${req.params.pid}). Values updated: ${JSON.stringify(updProd)}`,
         })
     } catch (error) {
         res.status(400).send({status: 'error', message: error.message})
@@ -82,7 +82,7 @@ productRouter.delete('/:pid', async (req, res)=>{
     try {
         await productManager.deleteProduct(req.params.pid)
         res.status(200).send({
-            status: `Producto eliminado (id: ${req.params.pid})`,
+            status: `Product deleted (id: ${req.params.pid})`,
         })
     } catch (error) {
         res.status(400).send({status: 'error', message: error.message})

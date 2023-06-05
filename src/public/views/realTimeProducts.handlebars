@@ -38,7 +38,7 @@
                 <p>Categoría: {{this.category}}</p>
                 <div class="d-flex flex-row justify-content-between">
                     <h4>${{this.price}}</h4>
-                    <button id="addToCart" data-id="{{this.id}}">Añadir al carrito</button>
+                    <button id="addToCart" data-id="{{this.id}}" data-cartid={{user.cartId}}>Añadir al carrito</button>
                 </div>
             </div>
         </div>

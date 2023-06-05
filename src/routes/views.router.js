@@ -9,11 +9,16 @@ function auth(req, res, next){
     if(req.session.user){
         return next()
     }
-    return res.status(401).send('Error de autorización.')
+    return res.status(401).send('Authentication error.')
 }
 
 viewsRouter.get('/', async(req, res)=>{
-    res.render('inicio')
+    if(req.session.user){
+        const data = req.session.user.cartId
+        res.render('inicio', {data})
+    }else{
+        res.render('inicio')
+    }
 })
 
 viewsRouter.get('/productos', auth, async(req, res)=>{
@@ -29,7 +34,7 @@ viewsRouter.get('/carts/:cid', auth, async(req, res)=>{
     const cid = req.params.cid
     const carts = await cartModel.find({}).sort({}).limit(100).lean()
     if(+cid < 1 || +cid > carts.length){
-        return res.status(401).send('Carrito no encontrado')
+        return res.status(401).send('Cart not found')
     }else{
         let cart = await cartModel.findOne({id: cid}).lean()
         let cartProducts = cart.products

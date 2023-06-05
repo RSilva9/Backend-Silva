@@ -6,22 +6,40 @@ const BtnLogout = document.getElementById("btnLogout")
 const BtnInicio = document.getElementById("btnInicio")
 var numCarrito
 
+// BtnAddToCart.forEach(btn=>{
+//     btn.addEventListener("click", ()=>{
+//         Swal.fire({
+//             title: 'Elije el ID de carrito.',
+//             input: 'text',
+//             inputPlaceholder: 'ID carrito',
+//             inputValidator: (value) => {
+//                 return !value && 'Introduce un ID válido.'
+//             },
+//             allowOutsideClick: false,
+//         }).then(result => {
+//             numCarrito = result.value
+//             socketClient.emit('addToCart', btn.dataset.id, numCarrito)
+//         })
+//     })
+// })
+
 BtnAddToCart.forEach(btn=>{
-    btn.addEventListener("click", ()=>{
+    btn.addEventListener("click", async()=>{
+        const response = await fetch('/sessions/getCartId')
+        if(!response.ok){
+            throw new Error("Unable to get cart ID")
+        }
+        const data = await response.json()
+        const cartId = await data.cartId
+        socketClient.emit('addToCart', btn.dataset.id, cartId)
         Swal.fire({
-            title: 'Elije el ID de carrito.',
-            input: 'text',
-            inputPlaceholder: 'ID carrito',
-            inputValidator: (value) => {
-                return !value && 'Introduce un ID válido.'
-            },
-            allowOutsideClick: false,
-        }).then(result => {
-            numCarrito = result.value
-            socketClient.emit('addToCart', btn.dataset.id, numCarrito)
+            icon: 'success',
+            title: 'Producto agregado al carrito.',
         })
     })
 })
+
+
 
 BtnLogout.onclick = ()=>{
     window.location.href = "/sessions/logout"

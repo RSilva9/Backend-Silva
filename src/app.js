@@ -52,15 +52,9 @@ app.use('/', viewsRouter)
 app.use('/api/products', productRouter)
 app.use('/api/carts', cartRouter)
 app.use('/sessions', sessionRouter)
-// Handlebars.registerHelper('length', function(array, len, options) {
-//     if(array.length == len) {
-//       return options.fn(this);
-//     }
-//     return options.inverse(this);
-// });
 
-mongoose.set('strictQuery', false)
 var connectionString = 'mongodb+srv://ramasilva909:backendcoder@backend-coder.gfvdsvb.mongodb.net/ecommerce'
+mongoose.set('strictQuery', false)
 mongoose.connect(connectionString)
 
 socketServer.on('connection', socket=>{

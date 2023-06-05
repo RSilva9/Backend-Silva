@@ -25,7 +25,7 @@ cartRouter.delete('/:cid/products/:pid', async(req, res)=>{
     await cartModel.updateOne({id: cid}, cart)
 
     res.status(200).send({
-        status: `Producto (_id: ${product._id}) eliminado del carrito.`
+        status: `Product (_id: ${product._id}) removed from cart.`
     })
 })
 
@@ -36,7 +36,7 @@ cartRouter.delete('/:cid', async(req, res)=>{
     cart.products = []
     await cartModel.updateOne({id: cid}, cart)
     res.status(200).send({
-        status: `Carrito (id: ${cid}) vaciado.`
+        status: `Cart (id: ${cid}) emptied.`
     })
 })
 
@@ -70,7 +70,7 @@ cartRouter.put('/:cid', async(req, res)=>{
     
     await cartModel.updateOne({id: cid}, cart)
     res.status(200).send({
-        status: `Productos agregados al carrito con éxito.`
+        status: `Products added to cart successfuly.`
     })
 })
 
@@ -89,6 +89,6 @@ cartRouter.put('/:cid/products/:pid', async(req, res)=>{
     
     await cartModel.updateOne({id: cid}, cart)
     res.status(200).send({
-        status: `Producto (_id: ${product._id}) actualizado con éxito.`
+        status: `Prodcut (_id: ${product._id}) updated successfuly.`
     })
 })

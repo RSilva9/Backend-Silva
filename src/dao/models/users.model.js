@@ -11,7 +11,12 @@ const userSchema = new mongoose.Schema({
     },
     age: Number,
     password: String,
+    cartId: Number,
     role: String
+})
+
+userSchema.pre('findOne', function(){
+    this.populate('cartId')
 })
 
 export const userModel = mongoose.model(userCollection, userSchema);

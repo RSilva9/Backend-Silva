@@ -1,10 +1,12 @@
 import passport from "passport";
 import local from 'passport-local';
 import { userModel } from './dao/models/users.model.js'
+import { cartManager } from "./dao/managersMongo/CartManager.js";
 import { createHash, isValidPassword } from "./utils.js";
 import GitHubStrategy from 'passport-github2'
 
 const LocalStrategy = local.Strategy
+
 const initializePassport = ()=>{
     passport.use('register', new LocalStrategy(
         {passReqToCallback: true, usernameField: 'email'}, async(req, username, password, done)=>{
@@ -19,21 +21,24 @@ const initializePassport = ()=>{
                 
                 let user = await userModel.findOne({email: username})
                 if(user){
-                    console.log("El usuario ya existe")
+                    console.log("User already exists.")
                     return done(null, false)
                 }
+                await cartManager.createCart()
+                const cartId = await cartManager.getCarts()
                 const newUser = {
                     first_name,
                     last_name,
                     email,
                     age,
                     password: createHash(password),
+                    cartId: cartId.length,
                     role
                 }
                 let result = await userModel.create(newUser)
                 return done(null, result)
             }catch(err){
-                return done("Error al obtener el usuario: " + err)
+                return done("Unable to get user: " + err)
             }
         }
     ))
@@ -42,7 +47,7 @@ const initializePassport = ()=>{
             try{
                 const user = await userModel.findOne({email: username})
                 if(!user){
-                    console.log("El usuario no existe")
+                    console.log("User does not exist.")
                     return done(null, false)
                 }
                 if(!isValidPassword(user,password)) return done(null, false)
@@ -60,17 +65,19 @@ const initializePassport = ()=>{
         try{
             const user = await userModel.findOne({email:profile._json.email})
             if(user) return done(null, user)
+            await cartManager.createCart()
+            const cartId = await cartManager.getCarts()
             const newUser =  await userModel.create({
                 first_name: profile._json.name,
                 email: profile._json.email,
+                cartId: cartId.length,
                 role: "usuario"
             })
             return done(null, newUser)
         }catch(err){
-            return done('Error al iniciar sesión con GitHub.')
+            return done('Unable to enter with GitHub.')
         }
     }
-
     ))
 
     passport.serializeUser((user, done)=>{
