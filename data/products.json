@@ -1,0 +1,111 @@
+[
+	{
+		"_id": {
+			"$oid": "645ac630c683f9a3c37415e9"
+		},
+		"id": 1,
+		"title": "Sugus Confitados",
+		"description": "Confites azucarados multifruta.",
+		"code": "A1234",
+		"price": 240,
+		"status": true,
+		"stock": 15,
+		"category": "Caramelos",
+		"thumbnail": "/img/thumbnails/sugus"
+	},
+	{
+		"_id": {
+			"$oid": "645ac630c683f9a3c37415ea"
+		},
+		"id": 2,
+		"title": "Marroc Felfort",
+		"description": "Bocadito Marroc de chocolate",
+		"code": "B1532",
+		"price": 180,
+		"status": true,
+		"stock": 10,
+		"category": "Chocolates",
+		"thumbnail": "/img/thumbnails/marroc"
+	},
+	{
+		"_id": {
+			"$oid": "645ac630c683f9a3c37415eb"
+		},
+		"id": 3,
+		"title": "Agua Villavicencio",
+		"description": "Agua mineral sin gas",
+		"code": "C4432",
+		"price": 300,
+		"status": true,
+		"stock": 30,
+		"category": "Bebidas",
+		"thumbnail": "/img/thumbnails/aguavillavicencio"
+	},
+	{
+		"_id": {
+			"$oid": "645ac630c683f9a3c37415ec"
+		},
+		"id": 4,
+		"title": "Billiken yogur banana",
+		"description": "Caramelo sabor yogur de banana",
+		"code": "D3333",
+		"price": 30,
+		"status": true,
+		"stock": 100,
+		"category": "Caramelos",
+		"thumbnail": "/img/thumbnails/billikenyogban"
+	},
+	{
+		"_id": {
+			"$oid": "645ac630c683f9a3c37415ed"
+		},
+		"id": 5,
+		"title": "Chicle Beldent Menta",
+		"description": "Chicle masticable sabor menta",
+		"code": "C1133",
+		"price": 300,
+		"status": true,
+		"stock": 25,
+		"category": "Chicles",
+		"thumbnail": "/img/thumbnails/beldentMenta"
+	},
+	{
+		"_id": {
+			"$oid": "645ac630c683f9a3c37415ee"
+		},
+		"id": 6,
+		"title": "Mogul Ositos Extreme",
+		"description": "Ositos de goma dulces con sabor ácido",
+		"code": "G7752",
+		"price": 280,
+		"status": true,
+		"stock": 10,
+		"category": "Caramelos",
+		"thumbnail": "/img/thumbnails/mogulXtreme"
+	},
+	{
+		"_id": {
+			"$oid": "645acc59f5eb48c042544003"
+		},
+		"id": 7,
+		"title": "Sprite Sin Azúcar",
+		"description": "Bebida gaseosa sabor lima sin azúcares.",
+		"code": "S4428",
+		"price": 500,
+		"status": true,
+		"stock": 10,
+		"category": "Bebidas",
+		"thumbnail": "/img/thumbnails/spriteSinAzucar",
+		"__v": 0
+	},
+	{
+		"title": "Bananita Dolca",
+		"description": "Chocolate con forma de banana relleno de dulce sabor banana.",
+		"code": "B1611",
+		"price": 110,
+		"stock": 15,
+		"category": "Chocolates",
+		"thumbnail": "/img/thumbnails/bananitaDolca",
+		"id": 8
+	}
+]
