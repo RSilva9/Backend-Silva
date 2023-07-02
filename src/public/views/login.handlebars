@@ -1,0 +1,30 @@
+<style>
+    form {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 10px;
+    }
+
+    label {
+      font-weight: bold;
+    }
+
+    input[type="email"],
+    input[type="password"] {
+      width: 300px;
+      padding: 5px;
+    }
+
+    input[type="submit"] {
+      width: 100px;
+      padding: 10px;
+    }
+</style>
+
+<form action="./login" method="POST">
+    <label for="email">Email:</label>
+    <input type="email" name="email">
+    <label for="password">Contraseña:</label>
+    <input type="password" name="password">
+    <input type="submit" value="Enviar">
+</form>

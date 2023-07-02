@@ -8,7 +8,7 @@ export default class ProductDaoMongo{
 
     getAll = async() =>{
         try {
-            let result = await this.model.find()
+            let result = await this.model.find().lean()
             return result
         } catch (error) {
             return new Error(error)
@@ -17,7 +17,7 @@ export default class ProductDaoMongo{
 
     paginateAll = async(limit, page, query, sort) =>{
         try {
-            let result = await this.model.paginate(query, limit, page, sort)
+            let result = await this.model.paginate(query, limit, page, sort).lean()
             return result
         } catch (error) {
             return new Error(error)

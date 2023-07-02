@@ -8,7 +8,7 @@ export default class CartDaoMongo{
 
     generateId = async()=>{
         try {
-            const carts = await this.model.find({})
+            const carts = await this.model.find({}).lean()
             if(carts && carts.length > 0){
                 return carts[carts.length-1].id + 1
             }
@@ -22,7 +22,7 @@ export default class CartDaoMongo{
 
     getAll = async() =>{
         try {
-            let result = await this.model.find()
+            let result = await this.model.find().lean()
             return result
         } catch (error) {
             return new Error(error)

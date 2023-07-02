@@ -1,0 +1,59 @@
+<style>
+     button {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #5c8bd1;
+            color: #ffffff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 5px;
+            transition: 0.5s;
+        }
+
+        button:hover {
+            background-color: #3d70bb;
+        }
+</style>
+
+<nav class="my-2 px-2 d-flex justify-content-between">
+    <div class="d-flex">
+        <h2 class="me-5">Bienvenido <strong>{{ user.first_name }} {{ user.last_name }}</strong></h2>
+        <h2>Rol: {{ user.role }}</h2>
+    </div>
+    <div>
+        <button id="btnInicio">Inicio</button>
+        <button id="btnLogout">Cerrar sesión</button>
+    </div>
+</nav>
+
+<div id="prodContainer" class="d-flex flex-row flex-wrap">
+    <div class="card m-1" style="width: 18rem">
+        <div class="card-body">
+            <h5 class="card-title">ID del carrito: {{cart.id}}</h5>
+            <ul>
+                {{#each cartProductsArray}}
+                    <li>
+                        <div class="d-flex flex-column">
+                            <h5>Producto: {{this.product.title}}</h5>
+                            <p>Precio: ${{this.product.price}} - Cantidad: {{this.quantity}}</p>
+                        </div>
+                    </li>
+                {{/each}}
+            </ul>
+        </div>
+    </div>
+</div>
+
+<script type="module">
+const BtnLogout = document.getElementById("btnLogout")
+const BtnInicio = document.getElementById("btnInicio")
+
+BtnLogout.onclick = ()=>{
+    window.location.href = "/sessions/logout"
+}
+
+BtnInicio.onclick = ()=>{
+    window.location.href = "/"
+}
+</script>

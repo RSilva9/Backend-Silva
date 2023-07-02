@@ -1,7 +1,7 @@
 import passport from "passport";
 import local from 'passport-local';
-import { userModel } from '../models/user.model.js'
-import CartService from "../services/cartService.js";
+import { userModel } from './models/user.model.js'
+import CartService from "./services/cartService.js";
 import { createHash, isValidPassword } from "./utils.js";
 import GitHubStrategy from 'passport-github2'
 

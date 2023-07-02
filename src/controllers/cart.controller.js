@@ -3,6 +3,13 @@ import ProductService from '../services/productService.js'
 const productService = new ProductService()
 const cartService = new CartService()
 
+const isAdmin = async(req, res, next)=>{
+    if(req.session.user.role == "admin"){
+        return next()
+    }
+    return res.status(401).send('Authentication error.')
+}
+
 const getCarts = async(req, res)=>{
     const result = await cartService.getCarts()
     res.json(result)
@@ -39,4 +46,4 @@ const deleteCart = async(req, res)=>{
     res.send("Cart deleted successfully.")
 }
 
-export default { getCarts, getCartById, createCart, addProductToCart, deleteCart }
+export default { isAdmin, getCarts, getCartById, createCart, addProductToCart, deleteCart }

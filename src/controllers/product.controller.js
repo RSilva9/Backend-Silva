@@ -1,6 +1,13 @@
 import ProductService from "../services/productService.js";
 const productService = new ProductService()
 
+const isAdmin = async(req, res, next)=>{
+    if(req.session.user.role == "admin"){
+        return next()
+    }
+    return res.status(401).send('Authentication error.')
+}
+
 const getProducts = async(req, res)=>{
     let result = await productService.getProducts()
     res.json(result)
@@ -62,4 +69,4 @@ const deleteProduct = async(req, res)=>{
     return res.json(result)
 }
 
-export default { getProducts, getProductById, addProduct, updateProduct, deleteProduct }
+export default { isAdmin, getProducts, getProductById, addProduct, updateProduct, deleteProduct }
