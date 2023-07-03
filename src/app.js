@@ -51,7 +51,6 @@ app.set('view engine', 'handlebars')
 app.use('/api/products', productRouter)
 app.use('/api/carts', cartRouter)
 app.use('/sessions', sessionRouter)
-app.use('/chat', chatRouter)
 app.use('/ticket', ticketRouter)
 app.use('/', viewsRouter)
 

@@ -1,3 +1,5 @@
+import UserDTO from '../dtos/User.Dto.js'
+
 function auth(req, res, next){
     if(req.session.user){
         return next()
@@ -84,10 +86,12 @@ const getCartId = async(req, res)=>{
 
 const current = async(req, res)=>{
     try {
-        req.session.user ?
-        res.status(200).send(req.session.user)
-        :
-        res.status(401).send('Authentication error.')
+        if(req.session.user){
+            let dtoUser = new UserDTO(req.session.user)
+            res.status(200).send(dtoUser)
+        }else{
+            res.status(401).send('Authentication error.')
+        }
     } catch (error) {
         res.status(400).send(error);
     }

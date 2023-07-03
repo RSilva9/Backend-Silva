@@ -13,6 +13,13 @@ function auth(req, res, next){
     return res.status(401).send('Authentication error.')
 }
 
+function isUser(req, res, next){
+    if(req.session.user && req.session.user.role == "usuario"){
+        return next()
+    }
+    return res.status(401).send('Authentication error.')
+}
+
 const viewIndex = async(req, res)=>{
     res.render('inicio')
 }
@@ -59,4 +66,4 @@ const viewFinalTicket = async(req, res)=>{
     res.render('finalTicket', {ticket})
 }
 
-export default { auth, viewIndex, viewProducts, viewCartWithId, viewProfile, viewFinalTicket }
+export default { auth, isUser, viewIndex, viewProducts, viewCartWithId, viewProfile, viewFinalTicket }
