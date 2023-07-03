@@ -27,7 +27,7 @@ btnProfile.onclick = ()=>{
     window.location.href = "/profile"
 }
 btnProducts.onclick = ()=>{
-    window.location.href = "/productos"
+    window.location.href = "/products"
 }
 btnCarts.onclick = async()=>{
     try {
@@ -47,7 +47,7 @@ btnLogout.onclick = ()=>{
 }
 
 document.addEventListener('DOMContentLoaded', function () {
-    fetch('/sessions/check-login')
+    fetch('/sessions/checkLogin')
     .then(function (response) {
         if (response.ok) {
             btnLogin.disabled = true;
