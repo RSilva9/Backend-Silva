@@ -7,5 +7,6 @@ viewsRouter.get('/', viewsController.viewIndex)
 viewsRouter.get('/products', viewsController.auth, viewsController.viewProducts)
 viewsRouter.get('/carts/:cid', viewsController.auth, viewsController.viewCartWithId)
 viewsRouter.get('/profile', viewsController.auth, viewsController.viewProfile)
+viewsRouter.get('/finalTicket/:code', viewsController.auth, viewsController.viewFinalTicket)
 
 export default viewsRouter

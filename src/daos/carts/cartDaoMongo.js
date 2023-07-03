@@ -41,6 +41,7 @@ export default class CartDaoMongo{
         try{
             const newCart = {
                 id: await this.generateId(),
+                totalPrice: 0
             }
             return await this.model.create(newCart)
         }catch(err){
@@ -48,23 +49,33 @@ export default class CartDaoMongo{
         }
     }
 
-    update = async(cid, p_id, pid) =>{
+    update = async(cid, p_id, pid, productPrice) =>{
         try{
             const cart = await this.model.findOne({id: cid}).lean()
             if(cart.products.length > 0){
                 for(let item of cart.products){
                     if (item.product.id == pid){
                         item.quantity += 1
-                        await this.model.updateOne({id: cid}, cart) 
-                        return;
+                        cart.totalPrice += Number(productPrice)
+                        return await this.model.updateOne({id: cid}, cart)
                     }
                 }
+                cart.totalPrice += Number(productPrice)
                 cart.products.push({product: p_id, quantity: 1})
             }else{
+                cart.totalPrice += Number(productPrice)
                 cart.products.push({product: p_id, quantity: 1})
             }
-            await this.model.updateOne({id: cid}, cart)  
+            return await this.model.updateOne({id: cid}, cart)  
         }catch(err){
+            return new Error(err)
+        }
+    }
+
+    renew = async(cid, cart)=>{
+        try {
+            return await this.model.updateOne({id: cid}, cart)
+        } catch (err) {
             return new Error(err)
         }
     }

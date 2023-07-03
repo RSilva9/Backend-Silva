@@ -14,7 +14,8 @@ const cartSchema = new mongoose.Schema({
                 quantity: Number
             }
         ]
-    }
+    },
+    totalPrice: Number
 })
 
 cartSchema.pre('findOne', function(){

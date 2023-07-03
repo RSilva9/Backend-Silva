@@ -61,6 +61,7 @@ const addProduct = async(req, res)=>{
 const updateProduct = async(req, res)=>{
     const updProd = req.body
     let result = await productService.updateProduct(req.params.pid, Object.keys(updProd), Object.values(updProd))
+    console.log(req.params.id, Object.keys(updProd), Object.values(updProd))
     res.json(result)
 }
 

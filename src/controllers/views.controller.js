@@ -1,8 +1,10 @@
 import ProductService from "../services/productService.js";
 import CartService from "../services/cartService.js";
+import TicketService from "../services/ticketService.js";
 
 const productService = new ProductService()
 const cartService = new CartService()
+const ticketService = new TicketService()
 
 function auth(req, res, next){
     if(req.session.user){
@@ -50,4 +52,11 @@ const viewProfile = async(req, res)=>{
     res.render('profile', {data})
 }
 
-export default { auth, viewIndex, viewProducts, viewCartWithId, viewProfile }
+const viewFinalTicket = async(req, res)=>{
+    const code = req.params.code
+    const data = await ticketService.showFinalTicket(code)
+    const ticket = data[0]
+    res.render('finalTicket', {ticket})
+}
+
+export default { auth, viewIndex, viewProducts, viewCartWithId, viewProfile, viewFinalTicket }

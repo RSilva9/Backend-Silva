@@ -1,0 +1,46 @@
+<style>
+    .rectangulo {
+        width: 400px;
+        padding: 20px;
+        border: 1px solid black;
+        border-radius: 5px;
+    }
+
+    .campo {
+        margin-bottom: 10px;
+    }
+
+    .campo label {
+        display: block;
+        font-weight: bold;
+        margin-bottom: 5px;
+    }
+
+    .campo span {
+        display: inline-block;
+        padding: 3px 5px;
+        border: 1px solid #ccc;
+        border-radius: 3px;
+    }
+</style>
+
+<div class="d-flex justify-content-center mt-5">
+    <div class="rectangulo">
+        <div class="campo">
+            <label>Codigo de Ticket:</label>
+            <span>{{ ticket.code }}</span>
+        </div>
+        <div class="campo">
+            <label>Fecha de pago:</label>
+            <span>{{ ticket.purchase_datetime }}</span>
+        </div>
+        <div class="campo">
+            <label>Comprador:</label>
+            <span>{{ ticket.purchaser }}</span>
+        </div>
+        <div class="campo">
+            <label>Precio final:</label>
+            <span>${{ ticket.amount }}</span>
+        </div>
+    </div>
+</div>

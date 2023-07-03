@@ -23,7 +23,7 @@ const getCartById = async(req, res)=>{
 
 const createCart = async(req, res)=>{
     await cartService.createCart()
-    res.send("Carrito created successfully.")
+    res.send("Cart created successfully.")
 }
 
 const addProductToCart = async(req, res)=>{
@@ -32,7 +32,8 @@ const addProductToCart = async(req, res)=>{
     const product = await productService.getProductById(pid)
     if(product){
         const p_id = product._id
-        await cartService.addProductToCart(cid, p_id, pid)
+        const productPrice = product.price
+        await cartService.addProductToCart(cid, p_id, pid, productPrice)
         res.send("Product added to cart successfully")
     }else{
         res.send("Product not found.")

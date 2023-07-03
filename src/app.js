@@ -4,6 +4,7 @@ import cartRouter from './routers/cart.router.js'
 import sessionRouter from './routers/session.router.js'
 import viewsRouter from './routers/views.router.js'
 import chatRouter from './routers/chat.router.js'
+import ticketRouter from './routers/ticket.router.js'
 import { messageModel } from './models/messages.model.js'
 import MongoClient from './daos/MongoClient.js'
 import initializePassport from './passport.config.js'
@@ -51,6 +52,7 @@ app.use('/api/products', productRouter)
 app.use('/api/carts', cartRouter)
 app.use('/sessions', sessionRouter)
 app.use('/chat', chatRouter)
+app.use('/ticket', ticketRouter)
 app.use('/', viewsRouter)
 
 const httpServer = app.listen(8080, ()=> console.log("Server Up!"))
@@ -71,6 +73,6 @@ socketServer.on('connection', socket=>{
 
     socket.on('addToCart', async(pid, cid)=>{
         const product = await productService.getProductById(pid)
-        await cartService.addProductToCart(cid, product._id, product.id)
+        await cartService.addProductToCart(cid, product._id, product.id, product.price)
     })
 })

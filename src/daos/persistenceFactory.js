@@ -10,7 +10,8 @@ export default class PersistenceFactory{
             case "MONGO":
                 const { default: ProductDaoMongo } = await import ('./products/productDaoMongo.js')
                 const { default: CartDaoMongo } = await import('./carts/cartDaoMongo.js')
-                return { ProductDao: new ProductDaoMongo(), CartDao: new CartDaoMongo() }
+                const { default: TicketDaoMongo } = await import('./tickets/ticketDaoMongo.js')
+                return { ProductDao: new ProductDaoMongo(), CartDao: new CartDaoMongo(), TicketDao: new TicketDaoMongo() }
         }
     }
 }

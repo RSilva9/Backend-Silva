@@ -24,11 +24,15 @@ export default class CartService{
         return await this.cartDao.create()
     }
 
-    addProductToCart = async(cid, p_id, pid)=>{
-        return await this.cartDao.update(cid, p_id, pid)
+    addProductToCart = async(cid, p_id, pid, productPrice)=>{
+        return await this.cartDao.update(cid, p_id, pid, productPrice)
     }
 
     deleteCart = async(cid)=>{
         return await this.cartDao.delete(cid)
+    }
+
+    renewCart = async(cid, cart)=>{
+        return await this.cartDao.renew(cid, cart)
     }
 }

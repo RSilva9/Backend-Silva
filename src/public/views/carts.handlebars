@@ -45,9 +45,12 @@
     </div>
 </div>
 
+<button id="btnTerminar">Terminar compra</button>
+
 <script type="module">
 const BtnLogout = document.getElementById("btnLogout")
 const BtnInicio = document.getElementById("btnInicio")
+const BtnTerminar = document.getElementById("btnTerminar")
 
 BtnLogout.onclick = ()=>{
     window.location.href = "/sessions/logout"
@@ -56,4 +59,9 @@ BtnLogout.onclick = ()=>{
 BtnInicio.onclick = ()=>{
     window.location.href = "/"
 }
+
+BtnTerminar.onclick = ()=>{
+    window.location.href = `/ticket/createTicket/{{cart.id}}`
+}
+
 </script>
