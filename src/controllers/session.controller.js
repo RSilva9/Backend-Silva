@@ -1,4 +1,12 @@
 import UserDTO from '../dtos/User.Dto.js'
+import EErrors from '../services/errors/EErrors.js'
+import CustomError from '../services/errors/CustomError.js'
+import { generateLoginErrorInfo, generateRegisterErrorInfo } from '../services/errors/info.js'
+import { userModel } from '../models/user.model.js'
+import CartService from '../services/cartService.js'
+import { createHash, isValidPassword } from "../utils.js";
+
+const cartService = new CartService()
 
 function auth(req, res, next){
     if(req.session.user){
@@ -18,7 +26,41 @@ const register = async(req, res)=>{
 }
 
 const postRegister = async(req, res)=>{
-    res.redirect('./login')
+    const { first_name, last_name, email, age, password } = req.body
+    if(!first_name || !last_name|| !email || !age || !password){
+        CustomError.createError({
+            name:"User creation error",
+            cause: generateRegisterErrorInfo({first_name, last_name, email, age, password}),
+            message: "Error trying to create user.",
+            code: EErrors.INVALID_REGISTER_CREDENTIALS_ERROR
+        })
+    }else{
+        var role
+        if(email === "adminCoder@coder.com"){
+            role = "admin"
+        }else{
+            role = "usuario"
+        }
+        
+        let user = await userModel.findOne({email: email})
+        if(user){
+            console.log("User already exists.")
+            return
+        }
+        await cartService.createCart()
+        const cartId = await cartService.getCarts()
+        const newUser = {
+            first_name,
+            last_name,
+            email,
+            age,
+            password: createHash(password),
+            cartId: cartId.length,
+            role
+        }
+        await userModel.create(newUser)
+        res.redirect('./login')
+    }
 }
 
 const failRegister = async(req, res)=>{
@@ -37,20 +79,26 @@ const login = async(req, res)=>{
 }
 
 const postLogin = async(req, res)=>{
-    if(!req.user){
-        return res.status(401).render('base', {
-            error: 'Incorrect email or password.'
+    const { email, password } = req.body
+    const user = await userModel.findOne({email: email})
+    if(!user){
+        CustomError.createError({
+            name:"User login error",
+            cause: generateLoginErrorInfo({email, password}),
+            message: "Error trying to login.",
+            code: EErrors.INVALID_LOGIN_CREDENTIALS_ERROR
         })
+    }else{
+        req.session.user = {
+            first_name: user.first_name,
+            last_name: user.last_name,
+            age: user.age,
+            email: user.email,
+            cartId: user.cartId,
+            role: user.role
+        }
+        res.redirect('../products')
     }
-    req.session.user = {
-        first_name: req.user.first_name,
-        last_name: req.user.last_name,
-        age: req.user.age,
-        email: req.user.email,
-        cartId: req.user.cartId,
-        role: req.user.role
-    }
-    res.redirect('../products')
 }
 
 const failLogin = async(req,res)=>{

@@ -1,4 +1,7 @@
 import ProductService from "../services/productService.js";
+import EErrors from '../services/errors/EErrors.js'
+import CustomError from '../services/errors/CustomError.js'
+import { generateProductErrorInfo } from '../services/errors/info.js'
 const productService = new ProductService()
 
 const isAdmin = async(req, res, next)=>{
@@ -61,12 +64,27 @@ const addProduct = async(req, res)=>{
 const updateProduct = async(req, res)=>{
     const updProd = req.body
     let result = await productService.updateProduct(req.params.pid, Object.keys(updProd), Object.values(updProd))
-    console.log(req.params.id, Object.keys(updProd), Object.values(updProd))
+    if(!result){
+        CustomError.createError({
+            name:"Product update error.",
+            cause: generateProductErrorInfo(req.params.pid),
+            message: "Error trying to update product.",
+            code: EErrors.INVALID_PRODUCT_ERROR
+        })
+    }
     res.json(result)
 }
 
 const deleteProduct = async(req, res)=>{
     let result = await productService.deleteProduct(req.params.pid)
+    if(result.deletedCount == 0){
+        CustomError.createError({
+            name:"Product deletion error.",
+            cause: generateProductErrorInfo(req.params.pid),
+            message: "Error trying to delete product.",
+            code: EErrors.INVALID_PRODUCT_ERROR
+        })
+    }
     return res.json(result)
 }
 

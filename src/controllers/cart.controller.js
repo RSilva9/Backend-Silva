@@ -1,5 +1,8 @@
 import CartService from '../services/cartService.js'
 import ProductService from '../services/productService.js'
+import EErrors from '../services/errors/EErrors.js'
+import CustomError from '../services/errors/CustomError.js'
+import { generateCartErrorInfo, generateRegisterErrorInfo } from '../services/errors/info.js'
 const productService = new ProductService()
 const cartService = new CartService()
 
@@ -42,8 +45,15 @@ const addProductToCart = async(req, res)=>{
 
 const deleteCart = async(req, res)=>{
     const cid = req.params.cid
-    await cartService.deleteCart(cid)
-
+    let result = await cartService.deleteCart(cid)
+    if(result.deletedCount == 0){
+        CustomError.createError({
+            name:"Cart deletion error.",
+            cause: generateCartErrorInfo(cid),
+            message: "Error trying to delete cart.",
+            code: EErrors.INVALID_PRODUCT_ERROR
+        })
+    }
     res.send("Cart deleted successfully.")
 }
 

@@ -5,11 +5,9 @@ import passport from 'passport';
 const sessionRouter = Router()
 
 sessionRouter.get('/register', sessionController.register)
-sessionRouter.post('/register', passport.authenticate('register', {failureRedirect:'/failRegister'}), sessionController.postRegister)
-sessionRouter.get('/failRegister', sessionController.failRegister)
+sessionRouter.post('/register', sessionController.postRegister)
 sessionRouter.get('/login', sessionController.login)
-sessionRouter.post('/login', passport.authenticate('login', {failureRedirect:'failLogin'}), sessionController.postLogin)
-sessionRouter.get('/failLogin', sessionController.failLogin)
+sessionRouter.post('/login', sessionController.postLogin)
 sessionRouter.get('/githubcallback', passport.authenticate('github', {failureRedirect: '/login'}), sessionController.githubCallback)
 sessionRouter.get('/logout', sessionController.logout)
 sessionRouter.get('/checkLogin', sessionController.auth, sessionController.checkLogin)

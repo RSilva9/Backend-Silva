@@ -18,6 +18,8 @@ import cookieParser from 'cookie-parser'
 import __dirname from './utils.js'
 import ProductService from './services/productService.js'
 import CartService from './services/cartService.js'
+import errorHandler from './middlewares/errors/index.js'
+import compression from 'express-compression'
 
 const productService = new ProductService()
 const cartService = new CartService()
@@ -44,15 +46,27 @@ app.use(passport.session())
 app.use(express.static(__dirname+'/public'))
 app.use(express.urlencoded({extended:true}))
 app.use(express.json())
+app.use(errorHandler)
 app.engine('handlebars', handlebars.engine())
 app.set('views', path.join('src', 'public', 'views'))
 app.set('view engine', 'handlebars')
+app.use(compression({
+    brotli:{enabled:true, zlib:{}}
+}))
 
 app.use('/api/products', productRouter)
 app.use('/api/carts', cartRouter)
 app.use('/sessions', sessionRouter)
 app.use('/ticket', ticketRouter)
 app.use('/', viewsRouter)
+app.get('/mockingproducts', async(req, res)=>{
+    const payload = []
+    for(let i=0; i<100; i++){
+        let product = await productService.getProductById(Math.floor(Math.random() * 5) + 1)
+        payload.push(product)
+    }
+    res.send(payload)
+})
 
 const httpServer = app.listen(8080, ()=> console.log("Server Up!"))
 export const socketServer = new Server(httpServer)
