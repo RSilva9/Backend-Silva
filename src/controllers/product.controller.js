@@ -2,12 +2,14 @@ import ProductService from "../services/productService.js";
 import EErrors from '../services/errors/EErrors.js'
 import CustomError from '../services/errors/CustomError.js'
 import { generateProductErrorInfo } from '../services/errors/info.js'
+import { logger } from "../utils.js";
 const productService = new ProductService()
 
 const isAdmin = async(req, res, next)=>{
     if(req.session.user.role == "admin"){
         return next()
     }
+    logger.error("Authentication error.")
     return res.status(401).send('Authentication error.')
 }
 
@@ -57,6 +59,7 @@ const addProduct = async(req, res)=>{
         let result = await productService.addProduct(product)
         res.json(result)
     }else{
+        logger.warning("Please, fill all the fields.")
         res.send("Please, fill all the fields.")
     }
 }
@@ -65,6 +68,7 @@ const updateProduct = async(req, res)=>{
     const updProd = req.body
     let result = await productService.updateProduct(req.params.pid, Object.keys(updProd), Object.values(updProd))
     if(!result){
+        logger.error("Error trying to update product.")
         CustomError.createError({
             name:"Product update error.",
             cause: generateProductErrorInfo(req.params.pid),
@@ -78,6 +82,7 @@ const updateProduct = async(req, res)=>{
 const deleteProduct = async(req, res)=>{
     let result = await productService.deleteProduct(req.params.pid)
     if(result.deletedCount == 0){
+        logger.error("Error trying to delete product.")
         CustomError.createError({
             name:"Product deletion error.",
             cause: generateProductErrorInfo(req.params.pid),

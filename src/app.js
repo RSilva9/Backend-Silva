@@ -5,6 +5,7 @@ import sessionRouter from './routers/session.router.js'
 import viewsRouter from './routers/views.router.js'
 import chatRouter from './routers/chat.router.js'
 import ticketRouter from './routers/ticket.router.js'
+import testRouter from './routers/test.router.js'
 import { messageModel } from './models/messages.model.js'
 import MongoClient from './daos/MongoClient.js'
 import initializePassport from './passport.config.js'
@@ -15,7 +16,7 @@ import handlebars from 'express-handlebars'
 import path from 'path'
 import { Server } from 'socket.io'
 import cookieParser from 'cookie-parser'
-import __dirname from './utils.js'
+import __dirname , { logger } from './utils.js'
 import ProductService from './services/productService.js'
 import CartService from './services/cartService.js'
 import errorHandler from './middlewares/errors/index.js'
@@ -58,6 +59,7 @@ app.use('/api/products', productRouter)
 app.use('/api/carts', cartRouter)
 app.use('/sessions', sessionRouter)
 app.use('/ticket', ticketRouter)
+app.use('/test', testRouter)
 app.use('/', viewsRouter)
 app.get('/mockingproducts', async(req, res)=>{
     const payload = []
@@ -68,7 +70,7 @@ app.get('/mockingproducts', async(req, res)=>{
     res.send(payload)
 })
 
-const httpServer = app.listen(8080, ()=> console.log("Server Up!"))
+const httpServer = app.listen(8080, ()=> logger.debug('Server up on port 8080!'))
 export const socketServer = new Server(httpServer)
 let client = new MongoClient()
 client.connect()

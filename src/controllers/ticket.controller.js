@@ -2,6 +2,7 @@ import TicketService from '../services/ticketService.js'
 import CartService from '../services/cartService.js'
 import ProductService from '../services/productService.js'
 import Randomstring from 'randomstring'
+import { logger } from '../utils.js'
 
 const ticketService = new TicketService()
 const cartService = new CartService()
@@ -59,6 +60,7 @@ const createTicket = async(req, res)=>{
         await ticketService.createTicket(newTicket)
         res.redirect(`/finalTicket/${code}`)
     }else{
+        logger.info("Cart empty.")
         res.send("Cart empty.")
     }
 }

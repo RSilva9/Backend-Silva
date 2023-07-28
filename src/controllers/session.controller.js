@@ -5,6 +5,7 @@ import { generateLoginErrorInfo, generateRegisterErrorInfo } from '../services/e
 import { userModel } from '../models/user.model.js'
 import CartService from '../services/cartService.js'
 import { createHash, isValidPassword } from "../utils.js";
+import { logger } from '../utils.js'
 
 const cartService = new CartService()
 
@@ -12,11 +13,13 @@ function auth(req, res, next){
     if(req.session.user){
         return next()
     }
+    logger.error("Authentication error.")
     return res.status(401).send('Authentication error.')
 }
 
 const register = async(req, res)=>{
     if(req.session.user){
+        logger.warning("You are already logged in.")
         return res.status(401).render('base', {
             error: 'You are already logged in.'
         })
@@ -28,6 +31,7 @@ const register = async(req, res)=>{
 const postRegister = async(req, res)=>{
     const { first_name, last_name, email, age, password } = req.body
     if(!first_name || !last_name|| !email || !age || !password){
+        logger.error("Error trying to create user.")
         CustomError.createError({
             name:"User creation error",
             cause: generateRegisterErrorInfo({first_name, last_name, email, age, password}),
@@ -44,7 +48,7 @@ const postRegister = async(req, res)=>{
         
         let user = await userModel.findOne({email: email})
         if(user){
-            console.log("User already exists.")
+            logger.warning("User already exists.")
             return
         }
         await cartService.createCart()
@@ -64,12 +68,13 @@ const postRegister = async(req, res)=>{
 }
 
 const failRegister = async(req, res)=>{
-    console.log("Failed Strategy")
+    logger.warning("Failed Strategy.")
     res.send({error: "Failed"})
 }
 
 const login = async(req, res)=>{
     if(req.session.user){
+        logger.warning("You are already logged in.")
         return res.status(401).render('base', {
             error: 'You are already logged in.'
         })
@@ -82,6 +87,7 @@ const postLogin = async(req, res)=>{
     const { email, password } = req.body
     const user = await userModel.findOne({email: email})
     if(!user){
+        logger.warning("Error trying to login.")
         CustomError.createError({
             name:"User login error",
             cause: generateLoginErrorInfo({email, password}),
@@ -120,7 +126,8 @@ const logout = async(req, res)=>{
 }
 
 const checkLogin = async(req, res) =>{
-    res.status(200).send('User logged in');
+    logger.info("User logged in.")
+    res.status(200).send('User logged in.');
 }
 
 const getCartId = async(req, res)=>{
@@ -128,6 +135,7 @@ const getCartId = async(req, res)=>{
         const cartId = req.session.user.cartId
         res.json({cartId})
     }else{
+        logger.error("Cart ID not found.")
         res.status(404).json({error: 'Cart ID not found.'})
     }
 }
@@ -138,9 +146,11 @@ const current = async(req, res)=>{
             let dtoUser = new UserDTO(req.session.user)
             res.status(200).send(dtoUser)
         }else{
+            logger.error("Authentication error.")
             res.status(401).send('Authentication error.')
         }
     } catch (error) {
+        logger.fatal(`Error: ${error}`)
         res.status(400).send(error);
     }
 }
