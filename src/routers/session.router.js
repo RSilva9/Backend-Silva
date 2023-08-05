@@ -13,5 +13,9 @@ sessionRouter.get('/logout', sessionController.logout)
 sessionRouter.get('/checkLogin', sessionController.auth, sessionController.checkLogin)
 sessionRouter.get('/getCartId', sessionController.getCartId)
 sessionRouter.get('/current', sessionController.current)
+sessionRouter.post('/passRecovery', sessionController.passRecovery)
+sessionRouter.get('/passReset/:token', sessionController.verifyToken)
+sessionRouter.post('/passUpdate/:user', sessionController.passUpdate)
+sessionRouter.get('/premium/:uid', sessionController.roleSwitch)
 
 export default sessionRouter
