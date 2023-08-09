@@ -14,6 +14,13 @@
         button:hover {
             background-color: #3d70bb;
         }
+    #forms{
+        display: flex;
+        justify-content: space-between;
+    }
+    #deleteProduct{
+        right: 0;
+    }
 </style>
 
 
@@ -38,15 +45,16 @@
                 <p>Categoría: {{this.category}}</p>
                 <div class="d-flex flex-row justify-content-between">
                     <h4>${{this.price}}</h4>
-                    <button id="addToCart" data-id="{{this.id}}" data-cartid={{user.cartId}}>Añadir al carrito</button>
+                    <button id="addToCart" data-id="{{this.id}}" data-owner="{{this.owner}}">Añadir al carrito</button>
                 </div>
+                <button id="btnDelete" data-id="{{this.id}}">X</button>
             </div>
         </div>
     {{/each}}
 </div>
 
-{{!-- <div>
-    <form action="/api/products" method="POST">
+<div id="forms">
+    <form name="createForm" id="createForm" data-user="{{user.email}}">
         <h3>Crear producto</h3>
         <label for="title">Title:</label>
         <input type="text" name="title">
@@ -71,10 +79,11 @@
         <br>
         <input type="submit" value="Enviar">
     </form>
-    <form action="/api/products" method="POST">
+    <form name="updateForm" id="updateForm">
         <h3>Actualizar producto</h3>
-        <label for="pid">Id de pro:</label>
-        <input type="text" name="title">
+        <label for="pid">Id de producto:</label>
+        <input type="text" name="pid">
+        <br>
         <label for="title">Title:</label>
         <input type="text" name="title">
         <br>
@@ -98,8 +107,9 @@
         <br>
         <input type="submit" value="Enviar">
     </form>
-</div> --}}
+</div>
 
 <script src=" https://cdn.jsdelivr.net/npm/sweetalert2@11.7.1/dist/sweetalert2.all.min.js "></script>
 <script src="/socket.io/socket.io.js"></script>
+<script src="https://unpkg.com/axios@1.1.2/dist/axios.min.js"></script>
 <script src="../productsView.js" type="module"></script>

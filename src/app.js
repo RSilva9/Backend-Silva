@@ -34,7 +34,7 @@ app.use(session({
         ttl: 15
     }),
     cookie:{
-        maxAge: 120000
+        maxAge: 160000
     },
     secret: 'secretCoder',
     resave: true,
@@ -89,5 +89,34 @@ socketServer.on('connection', socket=>{
     socket.on('addToCart', async(pid, cid)=>{
         const product = await productService.getProductById(pid)
         await cartService.addProductToCart(cid, product._id, product.id, product.price)
+    })
+    socket.on('createProduct', async(data, user)=>{
+        var products = await productService.getProducts()
+        let id
+        if(products.length === 0){
+            id = 1
+        }else{
+            id = products[products.length-1].id + 1
+        }
+        const prod = {
+            id: id,
+            title: data.title,
+            description: data.description,
+            code: data.code,
+            price: data.price,
+            stock: data.stock,
+            category: data.category,
+            thumbnail: data.thumbnail,
+            owner: user
+        }
+        await productService.addProduct(prod)
+        const newProducts = await productService.getProducts()
+        socketServer.emit('productCreated', newProducts);
+    })
+    socket.on('updateProduct', async(data)=>{
+        console.log(data)
+        const res = await productService.updateProduct(data.id, Object.keys(data), Object.values(data))
+        const newProducts = await productService.getProducts()
+        socketServer.emit('productCreated', newProducts)
     })
 })

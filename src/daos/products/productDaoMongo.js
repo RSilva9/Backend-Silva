@@ -45,7 +45,7 @@ export default class ProductDaoMongo{
                     producto[keys[i]] = values[i]
                 }
             }
-            await this.model.updateOne({id: pid}, producto)
+            return await this.model.updateOne({id: pid}, producto)
         }catch(err){
             return new Error(err)
         }

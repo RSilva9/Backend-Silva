@@ -46,6 +46,7 @@ const addProduct = async(req, res)=>{
         stock: +stock,
         category,
         thumbnail,
+        owner: req.session.user.email
       };
     let id
     if(products.length === 0){
@@ -87,7 +88,11 @@ const deleteProduct = async(req, res)=>{
         let found = await productService.getProductById(req.params.pid)
         if(found.owner == req.session.user.email){
             result = await productService.deleteProduct(req.params.pid)
+        }else{
+            return res.status(401).send('Authentication error.')
         }
+    }else{
+        return res.status(401).send('Authentication error.')
     }
     
     if(result.deletedCount == 0){
