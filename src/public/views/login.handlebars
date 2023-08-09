@@ -28,3 +28,12 @@
     <input type="password" name="password">
     <input type="submit" value="Enviar">
 </form>
+<button id="recovery">Olvidé mi contraseña</button>
+
+<script>
+  const btnRecovery = document.getElementById("recovery")
+  btnRecovery.onclick = ()=>{
+    window.location.href = "/passRecovery"
+  }
+
+</script>

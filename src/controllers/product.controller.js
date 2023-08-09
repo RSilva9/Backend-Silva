@@ -5,8 +5,8 @@ import { generateProductErrorInfo } from '../services/errors/info.js'
 import { logger } from "../utils.js";
 const productService = new ProductService()
 
-const isAdmin = async(req, res, next)=>{
-    if(req.session.user.role == "admin"){
+const isAdminOrPremium = async(req, res, next)=>{
+    if(req.session.user.role == "admin" || req.session.user.role == "premium"){
         return next()
     }
     logger.error("Authentication error.")
@@ -80,7 +80,16 @@ const updateProduct = async(req, res)=>{
 }
 
 const deleteProduct = async(req, res)=>{
-    let result = await productService.deleteProduct(req.params.pid)
+    let result
+    if(req.session.user.role == "admin"){
+        result = await productService.deleteProduct(req.params.pid)
+    }else if(req.session.user.role == "premium"){
+        let found = await productService.getProductById(req.params.pid)
+        if(found.owner == req.session.user.email){
+            result = await productService.deleteProduct(req.params.pid)
+        }
+    }
+    
     if(result.deletedCount == 0){
         logger.error("Error trying to delete product.")
         CustomError.createError({
@@ -93,4 +102,4 @@ const deleteProduct = async(req, res)=>{
     return res.json(result)
 }
 
-export default { isAdmin, getProducts, getProductById, addProduct, updateProduct, deleteProduct }
+export default { isAdminOrPremium, getProducts, getProductById, addProduct, updateProduct, deleteProduct }

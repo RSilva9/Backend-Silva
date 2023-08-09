@@ -12,7 +12,7 @@ const userSchema = new mongoose.Schema({
     age: Number,
     password: String,
     cartId: Number,
-    role: String
+    role: { type: String, enum: ['usuario', 'admin', 'premium'], default: 'usuario'}
 })
 
 userSchema.pre('findOne', function(){

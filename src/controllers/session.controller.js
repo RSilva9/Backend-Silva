@@ -6,6 +6,9 @@ import { userModel } from '../models/user.model.js'
 import CartService from '../services/cartService.js'
 import { createHash, isValidPassword } from "../utils.js";
 import { logger } from '../utils.js'
+import Randomstring from 'randomstring'
+import PassRecoveryModel from '../models/passRecovery.model.js'
+import nodemailer from 'nodemailer'
 
 const cartService = new CartService()
 
@@ -95,15 +98,25 @@ const postLogin = async(req, res)=>{
             code: EErrors.INVALID_LOGIN_CREDENTIALS_ERROR
         })
     }else{
-        req.session.user = {
-            first_name: user.first_name,
-            last_name: user.last_name,
-            age: user.age,
-            email: user.email,
-            cartId: user.cartId,
-            role: user.role
+        if(isValidPassword(user, password)){
+            req.session.user = {
+                first_name: user.first_name,
+                last_name: user.last_name,
+                age: user.age,
+                email: user.email,
+                cartId: user.cartId,
+                role: user.role
+            }
+            res.redirect('../products')
+        }else{
+            logger.warning("Wrong password.")
+            CustomError.createError({
+                name:"User login error",
+                cause: generateLoginErrorInfo({email, password}),
+                message: "Error trying to login.",
+                code: EErrors.INVALID_LOGIN_CREDENTIALS_ERROR
+            })
         }
-        res.redirect('../products')
     }
 }
 
@@ -155,4 +168,68 @@ const current = async(req, res)=>{
     }
 }
 
-export default { auth, register, postRegister, failRegister, login, postLogin, failLogin, githubCallback, logout, checkLogin, getCartId, current }
+const passRecovery = async(req, res)=>{
+    const email = req.body.email
+    const user = await userModel.findOne({email})
+    if(!user){
+        return res.status(404).json({status: 'error', error: 'User not found'})
+    }
+    const token = Randomstring.generate()
+    await PassRecoveryModel.create({email, token})
+    const mailerConfig = {
+        service: 'gmail',
+        auth: {user: "ramasilva909@gmail.com", pass: "vzpcejjwyjmeihtj" }
+    }
+    let transporter = nodemailer.createTransport(mailerConfig)
+    let message = {
+        from: "ramasilva909@gmail.com",
+        to: email,
+        subject: '[CODER BACKEND API] Reset your password',
+        html: `<h1>[CODER BACKEND API] Reset your password</h1><hr/><h2>Click the following button to reset your password</h2><hr/><a href="http://localhost:8080/sessions/passReset/${token}"><button>Reset password</button></a>`
+    }
+    try {
+        await transporter.sendMail(message)
+        res.json({status: 'success', message: `Email successfully sent to ${email} in order to reset password.`})
+    } catch (error) {
+        res.status(500).json({ status: 'error', error: error.message })
+    }
+}
+
+const verifyToken = async(req, res)=>{
+    const passRecovery = await PassRecoveryModel.findOne({ token: req.params.token }) 
+    if(!passRecovery){
+        return res.status(404).json({ status: 'error', error: 'Non-valid/expired token.'})
+    }
+    const user = passRecovery.email
+    res.render('passReset', {user})
+}
+
+const passUpdate = async(req, res)=>{
+    try {
+        const user = await userModel.findOne({ email: req.params.user })
+        if(user.password == createHash(req.body.newPassword)){
+            res.status(500).json({ status: 'error', error: 'Can not change to the same password' })
+        }
+        await userModel.findByIdAndUpdate(user._id, { password: createHash(req.body.newPassword )})
+        res.json({status: 'success', message: 'Password updated.'})
+        await PassRecoveryModel.deleteOne({ email: req.params.user })
+    } catch (error) {
+        res.status(500).json({ status: 'error', error: error.message })
+    }
+}
+
+const roleSwitch = async(req, res)=>{
+    try {
+        const uid = req.params.uid
+        const user = await userModel.findById(uid)
+        if(user.role == "premium"){
+            await userModel.findByIdAndUpdate(uid, { role: 'usuario'})
+        }else if(user.role == "usuario"){
+            await userModel.findByIdAndUpdate(uid, { role: 'premium'})
+        }
+    } catch (error) {
+        res.status(500).json({ status: 'error', error: error.message })
+    }
+}
+
+export default { auth, register, postRegister, failRegister, login, postLogin, failLogin, githubCallback, logout, checkLogin, getCartId, current, passRecovery, verifyToken, passUpdate, roleSwitch }

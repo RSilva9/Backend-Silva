@@ -5,8 +5,8 @@ const productRouter = express.Router()
 
 productRouter.get('/', productController.getProducts)
 productRouter.get('/:pid', productController.getProductById)
-productRouter.post('/', productController.isAdmin, productController.addProduct)
-productRouter.put('/:pid', productController.isAdmin, productController.updateProduct)
-productRouter.delete('/:pid', productController.isAdmin, productController.deleteProduct)
+productRouter.post('/', productController.isAdminOrPremium, productController.addProduct)
+productRouter.put('/:pid', productController.updateProduct)
+productRouter.delete('/:pid', productController.deleteProduct)
 
 export default productRouter
