@@ -47,7 +47,7 @@ const addProduct = async(req, res)=>{
         category,
         thumbnail,
         owner: req.session.user.email
-      };
+    }
     let id
     if(products.length === 0){
         id = 1
@@ -55,7 +55,7 @@ const addProduct = async(req, res)=>{
         id = products[products.length-1].id + 1
     }
 
-    if(title, description, code, price, stock, category, thumbnail){
+    if(title && description && code && price && stock && category && thumbnail){
         product.id = id
         let result = await productService.addProduct(product)
         res.json(result)
@@ -67,7 +67,19 @@ const addProduct = async(req, res)=>{
 
 const updateProduct = async(req, res)=>{
     const updProd = req.body
-    let result = await productService.updateProduct(req.params.pid, Object.keys(updProd), Object.values(updProd))
+    let result
+    if(req.session.user.role == "admin"){
+        result = await productService.updateProduct(req.params.pid, Object.keys(updProd), Object.values(updProd))
+    }else if(req.session.user.role == "premium"){
+        let found = await productService.getProductById(req.params.pid)
+        if(found.owner == req.session.user.email){
+            result = await productService.updateProduct(req.params.pid, Object.keys(updProd), Object.values(updProd))
+        }else{
+            return res.status(401).send('Authentication error.')
+        }
+    }else{
+        return res.status(401).send('Authentication error.')
+    }
     if(!result){
         logger.error("Error trying to update product.")
         CustomError.createError({

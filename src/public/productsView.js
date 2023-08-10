@@ -36,7 +36,16 @@ function setEventListeners(){
                 method: 'delete',
                 url: `http://localhost:8080/api/products/${btn.dataset.id}`,
             })
-            window.location.reload()
+            .then(function (response) {
+                console.log(response);
+                window.location.reload()
+                }
+            )
+            .catch(function (response) {
+                if(response.response.status == 401){
+                    alert("You are not autorized to delete this product.")
+                };
+            })
         })
     })
 }
@@ -50,21 +59,36 @@ BtnInicio.onclick = ()=>{
     window.location.href = "/"
 }
 
-createForm.onsubmit = (event)=>{
+createForm.onsubmit = async(event)=>{
     event.preventDefault()
     const formData = new FormData(createForm)
-    const data = {}
+    const product = {}
     formData.forEach((value, key)=>{
-        data[key] = value
+        product[key] = value
     })
-    socketClient.emit('createProduct', data, createForm.dataset.user)
+    const json = JSON.stringify(product)
+    let customConfig = {
+        headers: {
+        'Content-Type': 'application/json'
+        }
+    };
+    const response = await axios.post('http://localhost:8080/api/products/', json, customConfig)
+    .then(function (response) {
+        console.log(response);
+        }
+    )
+    .catch(function (response) {
+        if(response.response.status == 401){
+            alert("You are not autorized to create a product.")
+        };
+    })
+    socketClient.emit('createProduct')
 }
 
-updateForm.onsubmit = (event)=>{
+updateForm.onsubmit = async(event)=>{
     event.preventDefault()
     const form = document.forms['updateForm']
-    const data = {
-        id: Number(form.pid.value),
+    const product = {
         title: form.title.value,
         description: form.description.value,
         code: form.code.value,
@@ -73,7 +97,23 @@ updateForm.onsubmit = (event)=>{
         category: form.category.value,
         thumbnail: form.thumbnail.value
     }
-    socketClient.emit('updateProduct', data)
+    let customConfig = {
+        headers: {
+        'Content-Type': 'application/json'
+        }
+    };
+    const json = JSON.stringify(product)
+    const response = await axios.put(`http://localhost:8080/api/products/${form.pid.value}`, json, customConfig)
+    .then(function (response) {
+        console.log(response);
+        }
+    )
+    .catch(function (response) {
+        if(response.response.status == 401){
+            alert("You are not autorized to edit this product.")
+        };
+    })
+    socketClient.emit('updateProduct')
 }
 
 socketClient.on('productCreated', async newProducts =>{
