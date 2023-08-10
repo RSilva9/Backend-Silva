@@ -16,12 +16,13 @@ import handlebars from 'express-handlebars'
 import path from 'path'
 import { Server } from 'socket.io'
 import cookieParser from 'cookie-parser'
-import __dirname , { logger } from './utils.js'
+import __dirname , { logger, swaggerOptions } from './utils.js'
 import ProductService from './services/productService.js'
 import CartService from './services/cartService.js'
 import errorHandler from './middlewares/errors/index.js'
 import compression from 'express-compression'
-import axios from 'axios'
+import swaggerJSDoc from 'swagger-jsdoc'
+import swaggerUI from 'swagger-ui-express'
 
 const productService = new ProductService()
 const cartService = new CartService()
@@ -56,6 +57,7 @@ app.use(compression({
     brotli:{enabled:true, zlib:{}}
 }))
 
+app.use('/api/docs', swaggerUI.serve, swaggerUI.setup(swaggerJSDoc(swaggerOptions)))
 app.use('/api/products', productRouter)
 app.use('/api/carts', cartRouter)
 app.use('/sessions', sessionRouter)

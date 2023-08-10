@@ -1,0 +1,22 @@
+paths:
+  /api/products/{pid}:
+    delete:
+      summary: Borra un producto por su id
+      tags:
+        - Products
+      parameters:
+      - name: pid
+        in: path
+        required: true
+        description: id del producto buscado
+        schema:
+          type: integer
+      responses:
+        "200":
+          description: "Borra un producto por su id"
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#components/schemas/Product'

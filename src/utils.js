@@ -59,4 +59,19 @@ const createLogger = env =>{
     }
 }
 
+export const swaggerOptions = {
+    definition:{
+        openapi: '3.0.1',
+        info:{
+            title: 'CODER BACKEND E-COMMERCE API',
+            description: 'API para curso de Desarrollo Backend de Coderhouse',
+            version: '1.0.0'
+        },
+        servers: [
+            { url: 'http://localhost:8080' }
+        ]
+    },
+    apis:[`${__dirname}/docs/**/*.yaml`]
+}
+
 export const logger = createLogger(process.env.ENVIRONMENT)

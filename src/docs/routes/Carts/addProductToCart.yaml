@@ -1,0 +1,15 @@
+paths:
+  /api/carts/{cid}/product/{pid}:
+    post:
+      summary: Agrega un producto a un carrito
+      tags:
+        - Carts
+      responses:
+        "200":
+          description: "Agrega un producto a un carrito"
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#components/schemas/Cart'

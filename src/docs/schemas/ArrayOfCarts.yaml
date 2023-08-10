@@ -1,0 +1,51 @@
+components:
+  schemas:
+    ArrayOfCarts:
+      type: array
+      items:
+        type: object
+        properties:
+          id:
+            type: integer
+            description: The cart's unique id
+          totalPrice:
+            type: integer
+            description: The cart's total price (sum of all products)
+          products:
+            type: array
+            description: Array of products that the cart contains
+            items:
+              type: object
+              properties:
+                product:
+                  type: string
+                  description: Product unique _id
+                quantity:
+                  type: integer
+                  description: Quantity of this product in cart
+        required:
+          - id
+          - totalPrice
+          - products
+      example:
+        - id: 1
+          totalPrice: 960
+          products:
+            - product: 645ac630c683f9a3c37415ea
+              quantity: 4
+            - product: 645ac630c683f9a3c37415e9
+              quantity: 1
+        - id: 2
+          totalPrice: 960
+          products:
+            - product: 645ac630c683f9a3c37415ea
+              quantity: 1
+            - product: 645ac630c683f9a3c37415e9
+              quantity: 2
+        - id: 3
+          totalPrice: 960
+          products:
+            - product: 645ac630c683f9a3c37415ea
+              quantity: 1
+            - product: 645ac630c683f9a3c37415e9
+              quantity: 1

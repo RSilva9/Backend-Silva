@@ -1,0 +1,62 @@
+components:
+  schemas:
+    ArrayOfProducts:
+      type: array
+      items:
+        type: object
+        properties:
+          id:
+            type: integer
+            description: The product's unique id
+          title:
+            type: string
+            description: The product's name
+          description:
+            type: string
+            description: The description of the product
+          code:
+            type: string
+            description: The product's unique code
+          price:
+            type: integer
+            description: The product's price
+          status:
+            type: boolean
+            description: The product's status
+          stock:
+            type: integer
+            description: The product's current stock
+          category:
+            type: string
+            description: The product's category
+          thumbnail:
+            type: string
+            description: The path to the product's image
+      example:
+        - id: 1
+          title: "Sugus Confitados"
+          description: "Confites azucarados multifruta."
+          code: "A1234"
+          price: 240
+          status: true
+          stock: 24
+          category: "Caramelos"
+          thumbnail: "/img/thumbnails/sugus"
+        - id: 2
+          title: "Marroc Felfort"
+          description: "Bocadito Marroc de chocolate."
+          code: "B1532"
+          price: B1532
+          status: true
+          stock: 5
+          category: "Chocolates"
+          thumbnail: "/img/thumbnails/marroc"
+        - id: 3
+          title: "Agua Villavicencio"
+          description: "Agua mineral sin gas."
+          code: "C4432"
+          price: 320
+          status: true
+          stock: 9
+          category: "Bebidas"
+          thumbnail: "/img/thumbnails/aguavillavicencio"

@@ -1,0 +1,22 @@
+paths:
+  /api/carts/{cid}:
+    get:
+      summary: Obtiene un carrito por su id
+      tags:
+        - Carts
+      parameters:
+      - name: cid
+        in: path
+        required: true
+        description: id del carrito buscado
+        schema:
+          type: integer
+      responses:
+        "200":
+          description: "Obtiene un carrito por su id"
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#components/schemas/Cart'
