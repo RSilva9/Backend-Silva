@@ -1,6 +1,7 @@
 <style>
     .rectangulo {
-        width: 300px;
+        position: relative;
+        width: 400px;
         padding: 20px;
         border: 1px solid black;
         border-radius: 5px;
@@ -22,10 +23,40 @@
         border: 1px solid #ccc;
         border-radius: 3px;
     }
+
+    button {
+        padding: 10px 20px;
+        font-size: 16px;
+        background-color: #5c8bd1;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        margin: 5px;
+    }
+
+    a {
+        color: white;
+        text-decoration: none;
+    }
+
+    img{
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        width: 180px;
+        z-index: 1;
+    }
+
+    #submitButton{
+        margin-top: 15px;
+    }
 </style>
+
+<button id="btnInicio">Inicio</button>
 
 <div class="d-flex justify-content-center mt-5">
     <div class="rectangulo">
+        <img src="../uploads/profiles/{{data.pfp}}">
         <div class="campo">
             <label>Nombre:</label>
             <span>{{ data.first_name }}</span>
@@ -42,5 +73,24 @@
             <label>Rol:</label>
             <span>{{ data.role }}</span>
         </div>
+        <div class="campo">
+            <label>Subir documentos:</label>
+            <form id="fileForm" method="post" action="/sessions/uploadDocuments" enctype="multipart/form-data">
+                <label for="pfp">Foto de perfil:</label>
+                <input type="file" name="pfp">
+                <br>
+                <label for="documentos">Comprobante de domicilio:</label>
+                <input type="file" name="documentos" multiple>
+                <br>
+                <input type="submit" id="submitButton">
+            </form>
+        </div>
+        <div class="campo">
+            <button id="viewDocuments">Ver documentos subidos</button>
+        </div>
     </div>
 </div>
+
+<script src="/socket.io/socket.io.js"></script>
+<script src="https://unpkg.com/axios@1.1.2/dist/axios.min.js"></script>
+<script src="../profile.js" type="module"></script>

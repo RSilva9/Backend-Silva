@@ -99,14 +99,25 @@ const postLogin = async(req, res)=>{
         })
     }else{
         if(isValidPassword(user, password)){
+            var pfp = ""
+            if(user.documents && (user.documents).length > 0){
+                for(let item of user.documents){
+                    if(item.fileType=="pfp"){
+                        pfp = item.name
+                    }
+                }
+            }
             req.session.user = {
                 first_name: user.first_name,
                 last_name: user.last_name,
                 age: user.age,
                 email: user.email,
                 cartId: user.cartId,
-                role: user.role
+                role: user.role,
+                pfp: pfp
             }
+            user.last_connection = new Date()
+            await user.save()
             res.redirect('../products')
         }else{
             logger.warning("Wrong password.")
@@ -130,11 +141,17 @@ const githubCallback = async(req, res)=>{
 }
 
 const logout = async(req, res)=>{
-    req.session.destroy(err=>{
+    const user = await userModel.findOne({email: req.session.user.email})
+    req.session.destroy(async err=>{
         if(err) res.status(500).render('base', {
             error: err
         })
-        else res.redirect('../')
+        else 
+        {
+            user.last_connection = new Date()
+            await user.save()
+            res.redirect('../')
+        }
     })
 }
 
@@ -222,14 +239,53 @@ const roleSwitch = async(req, res)=>{
     try {
         const uid = req.params.uid
         const user = await userModel.findById(uid)
-        if(user.role == "premium"){
-            await userModel.findByIdAndUpdate(uid, { role: 'usuario'})
-        }else if(user.role == "usuario"){
-            await userModel.findByIdAndUpdate(uid, { role: 'premium'})
+        if(user.role == "usuario"){
+            if(user.documents && user.documents.length > 0){
+                for(let item of user.documents){
+                    if(item.fileType == "comprobante_domicilio"){
+                        await userModel.findByIdAndUpdate(uid, { role: 'premium'})
+                        req.session.user.role = "premium"
+                    }
+                }
+            }else{
+                logger.error("User documentation insufficient.")
+                res.status(400).json({ status: 'error', error: "User documentation insufficient." })
+            }
         }
+        res.redirect("/")
     } catch (error) {
         res.status(500).json({ status: 'error', error: error.message })
     }
 }
 
-export default { auth, register, postRegister, failRegister, login, postLogin, failLogin, githubCallback, logout, checkLogin, getCartId, current, passRecovery, verifyToken, passUpdate, roleSwitch }
+const uploadDocuments = async(req, res)=>{
+    try {
+        const user = await userModel.findOne({email: req.session.user.email})
+        const uploadedFiles = req.files
+        if(uploadedFiles.pfp){
+            const newFile = {
+                name: uploadedFiles.pfp[0].filename,
+                reference: `${uploadedFiles.pfp[0].destination}/${uploadedFiles.pfp[0].filename}`,
+                fileType: "pfp"
+            }
+            req.session.user.pfp = `${uploadedFiles.pfp[0].filename}`
+            user.documents.push(newFile)
+        }
+        if(uploadedFiles.documentos){
+            for(let item of uploadedFiles.documentos){
+                const newFile = {
+                    name: item.filename,
+                    reference: `${item.destination}/${item.filename}`,
+                    fileType: "comprobante_domicilio"
+                }
+                user.documents.push(newFile)
+            }
+        }
+        await user.save()
+        res.redirect('/profile')
+    } catch (error) {
+        res.status(500).json({ status: 'error', error: error.message })
+    }
+}
+
+export default { auth, register, postRegister, failRegister, login, postLogin, failLogin, githubCallback, logout, checkLogin, getCartId, current, passRecovery, verifyToken, passUpdate, roleSwitch, uploadDocuments}

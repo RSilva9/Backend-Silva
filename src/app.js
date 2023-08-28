@@ -23,6 +23,7 @@ import errorHandler from './middlewares/errors/index.js'
 import compression from 'express-compression'
 import swaggerJSDoc from 'swagger-jsdoc'
 import swaggerUI from 'swagger-ui-express'
+import { userModel } from './models/user.model.js'
 
 const productService = new ProductService()
 const cartService = new CartService()

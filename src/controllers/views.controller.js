@@ -1,6 +1,7 @@
 import ProductService from "../services/productService.js";
 import CartService from "../services/cartService.js";
 import TicketService from "../services/ticketService.js";
+import { userModel } from "../models/user.model.js";
 import { logger } from "../utils.js";
 
 const productService = new ProductService()
@@ -70,4 +71,14 @@ const viewFinalTicket = async(req, res)=>{
     res.render('finalTicket', {ticket})
 }
 
-export default { auth, isUser, viewIndex, viewProducts, viewCartWithId, viewProfile, viewFinalTicket }
+const viewDocuments = async(req, res)=>{
+    const user = await userModel.findOne({email: req.session.user.email}).lean().exec()
+    if(user.documents){
+        const documents = user.documents
+        res.render('userDocuments', {documents})
+    }else{
+        res.render('noDocuments')
+    }
+}
+
+export default { auth, isUser, viewIndex, viewProducts, viewCartWithId, viewProfile, viewFinalTicket, viewDocuments }

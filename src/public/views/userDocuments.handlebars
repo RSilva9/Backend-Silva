@@ -1,0 +1,48 @@
+<style>
+    .rectangulo {
+        position: relative;
+        width: 400px;
+        padding: 20px;
+        border: 1px solid black;
+        border-radius: 5px;
+    }
+
+    .document-frame{
+        border: 1px solid black;
+        border-radius: 5px;
+        margin: 15px;
+    }
+    p{
+        text-align: center;
+    }
+
+    button {
+        padding: 10px 20px;
+        font-size: 16px;
+        background-color: #5c8bd1;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        margin: 5px;
+    }
+</style>
+
+<button id="btnInicio">Inicio</button>
+
+<div class="d-flex justify-content-center mt-5">
+    <div class="rectangulo">
+        {{#each documents}}
+        <div class="document-frame">
+            <p>File name: {{this.name}}</p>
+        </div>
+        {{/each}}
+    </div>
+</div>
+
+<script>
+    const btnInicio = document.getElementById("btnInicio")
+
+    btnInicio.onclick = ()=>{
+        window.location.href = "/"
+    }
+</script>

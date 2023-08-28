@@ -10,5 +10,6 @@ viewsRouter.get('/profile', viewsController.auth, viewsController.viewProfile)
 viewsRouter.get('/finalTicket/:code', viewsController.auth, viewsController.viewFinalTicket)
 viewsRouter.get('/passRecovery', (req, res)=> res.render("passRecovery", {}))
 viewsRouter.get('/chat', viewsController.isUser, (req, res)=> res.render("chat", {}))
+viewsRouter.get('/documents', viewsController.viewDocuments)
 
 export default viewsRouter

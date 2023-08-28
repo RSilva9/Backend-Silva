@@ -1,6 +1,23 @@
 import { Router } from 'express';
 import sessionController from '../controllers/session.controller.js'
 import passport from 'passport';
+import multer from 'multer';
+
+const destinationByFileType = (req, file, cb) => {
+    if (file.fieldname === 'pfp') {
+      cb(null, 'src/public/uploads/profiles')
+    } else if (file.fieldname === 'documentos') {
+      cb(null, 'src/public/uploads/documents')
+    } else {
+      cb(new Error('Invalid fieldname'))
+    }
+}
+
+const storage  = multer.diskStorage({
+    destination: destinationByFileType,
+    filename: function (req, file, cb) { cb(null, file.originalname) }
+})
+const upload = multer({storage: storage})
 
 const sessionRouter = Router()
 
@@ -17,5 +34,9 @@ sessionRouter.post('/passRecovery', sessionController.passRecovery)
 sessionRouter.get('/passReset/:token', sessionController.verifyToken)
 sessionRouter.post('/passUpdate/:user', sessionController.passUpdate)
 sessionRouter.get('/premium/:uid', sessionController.roleSwitch)
+sessionRouter.post('/uploadDocuments', upload.fields([
+    { name: 'pfp', maxCount: 1 },
+    { name: 'documentos', maxCount: 10 }
+]), sessionController.uploadDocuments)
 
 export default sessionRouter
