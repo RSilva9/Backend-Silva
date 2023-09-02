@@ -288,4 +288,36 @@ const uploadDocuments = async(req, res)=>{
     }
 }
 
-export default { auth, register, postRegister, failRegister, login, postLogin, failLogin, githubCallback, logout, checkLogin, getCartId, current, passRecovery, verifyToken, passUpdate, roleSwitch, uploadDocuments}
+const getAllUsers = async(req, res)=>{
+    try {
+        const users = await userModel.find()
+        const dtoUsers = []
+        for(let item of users){
+            let dtoUser = new UserDTO(item)
+            dtoUsers.push(dtoUser)
+        }
+        res.status(200).send(dtoUsers)
+    } catch (error) {
+        res.status(500).json({ status: 'error', error: error.message })
+    }
+}
+
+const deleteInactiveUsers = async(req, res)=>{
+    try {
+        const users = await userModel.find()
+        const currentDate = new Date()
+        const twoDays = new Date(currentDate)
+        twoDays.setDate(currentDate.getDate()-2)
+
+        for(let item of users){
+            if(item.last_connection < twoDays){
+                const deletedUser = await userModel.findOneAndDelete({email: item.email})
+            }
+        }
+        res.status(200).send("Inactive users deleted.")
+    } catch (error) {
+        res.status(500).json({ status: 'error', error: error.message })
+    }
+}
+
+export default { auth, register, postRegister, failRegister, login, postLogin, failLogin, githubCallback, logout, checkLogin, getCartId, current, passRecovery, verifyToken, passUpdate, roleSwitch, uploadDocuments, getAllUsers, deleteInactiveUsers}

@@ -3,6 +3,8 @@ import EErrors from '../services/errors/EErrors.js'
 import CustomError from '../services/errors/CustomError.js'
 import { generateProductErrorInfo } from '../services/errors/info.js'
 import { logger } from "../utils.js";
+import nodemailer from 'nodemailer'
+
 const productService = new ProductService()
 
 const isAdminOrPremium = async(req, res, next)=>{
@@ -37,6 +39,7 @@ const getProductById = async(req, res)=>{
 
 const addProduct = async(req, res)=>{
     const {title, description, code, price, stock, category, thumbnail} = req.body
+    const thumbnailWithExt = `${thumbnail}.jpg`
     var products = await productService.getProducts()
     const product = {
         title,
@@ -45,7 +48,7 @@ const addProduct = async(req, res)=>{
         price: +price,
         stock: +stock,
         category,
-        thumbnail,
+        thumbnail: thumbnailWithExt,
         owner: req.session.user.email
     }
     let id
@@ -93,8 +96,24 @@ const updateProduct = async(req, res)=>{
 }
 
 const deleteProduct = async(req, res)=>{
+    const mailerConfig = {
+        service: 'gmail',
+        auth: {user: "ramasilva909@gmail.com", pass: "vzpcejjwyjmeihtj" }
+    }
+    let transporter = nodemailer.createTransport(mailerConfig)
+
     let result
     if(req.session.user.role == "admin"){
+        let found = await productService.getProductById(req.params.pid)
+        if(found.owner){
+            let message = {
+                from: "ramasilva909@gmail.com",
+                to: found.owner,
+                subject: '[CODER BACKEND API] Your product was deleted',
+                html: `<h1>[CODER BACKEND API] <h2>Your product "${found.title}" has been deleted by an administrator.</h2>`
+            }
+            await transporter.sendMail(message)
+        }
         result = await productService.deleteProduct(req.params.pid)
     }else if(req.session.user.role == "premium"){
         let found = await productService.getProductById(req.params.pid)

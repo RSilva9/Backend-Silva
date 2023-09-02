@@ -4,14 +4,28 @@ import passport from 'passport';
 import multer from 'multer';
 
 const destinationByFileType = (req, file, cb) => {
-    if (file.fieldname === 'pfp') {
+  switch(file.fieldname){
+    case 'pfp':
       cb(null, 'src/public/uploads/profiles')
-    } else if (file.fieldname === 'documentos') {
+    break;
+    case 'documentos':
       cb(null, 'src/public/uploads/documents')
-    } else {
+    break;
+    case 'product':
+      cb(null, 'src/public/uploads/products')
+    break;
+    default:
       cb(new Error('Invalid fieldname'))
-    }
+      break;
+  }
 }
+//     if (file.fieldname === 'pfp') {
+//       cb(null, 'src/public/uploads/profiles')
+//     } else if (file.fieldname === 'documentos') {
+//       cb(null, 'src/public/uploads/documents')
+//     } else {
+//       cb(new Error('Invalid fieldname'))
+//     }
 
 const storage  = multer.diskStorage({
     destination: destinationByFileType,
@@ -21,6 +35,8 @@ const upload = multer({storage: storage})
 
 const sessionRouter = Router()
 
+sessionRouter.get('/', sessionController.getAllUsers)
+sessionRouter.get('/deleteInactiveUsers', sessionController.deleteInactiveUsers)
 sessionRouter.get('/register', sessionController.register)
 sessionRouter.post('/register', sessionController.postRegister)
 sessionRouter.get('/login', sessionController.login)
@@ -36,6 +52,7 @@ sessionRouter.post('/passUpdate/:user', sessionController.passUpdate)
 sessionRouter.get('/premium/:uid', sessionController.roleSwitch)
 sessionRouter.post('/uploadDocuments', upload.fields([
     { name: 'pfp', maxCount: 1 },
+    { name: 'product', maxCount: 1 },
     { name: 'documentos', maxCount: 10 }
 ]), sessionController.uploadDocuments)
 

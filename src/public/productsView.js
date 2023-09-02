@@ -123,6 +123,7 @@ socketClient.on('productCreated', async newProducts =>{
         newDiv.innerHTML = `
         <div class="card m-1" style="width: 18rem">
             <div class="card-body">
+                <img src='../uploads/products/${prod.thumbnail}'/>
                 <h4 class="card-title">${prod.title}</h4>
                 <h5 class="card-subtitle mb-2 text-body-secondary">Disponibles: ${prod.stock}</h5>
                 <h6 class="card-text">${prod.description}</h6>

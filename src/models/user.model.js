@@ -20,7 +20,7 @@ const userSchema = new mongoose.Schema({
             fileType: String
         }
     ],
-    last_connection: String
+    last_connection: Object
 })
 
 userSchema.pre('findOne', function(){

@@ -21,6 +21,9 @@
     #deleteProduct{
         right: 0;
     }
+    img{
+        width: 200px;
+    }
 </style>
 
 
@@ -39,6 +42,7 @@
     {{#each products}}
         <div class="card m-1" style="width: 18rem">
             <div class="card-body">
+                <img src='../uploads/products/{{this.thumbnail}}'/>
                 <h4 class="card-title">{{this.title}}</h4>
                 <h5 class="card-subtitle mb-2 text-body-secondary">Disponibles: {{this.stock}}</h5>
                 <h6 class="card-text">{{this.description}}</h6>
@@ -75,7 +79,7 @@
         <input type="text" name="category">
         <br>
         <label for="thumbnail">Thumbnail:</label>
-        <input type="text" name="thumbnail">
+        <input type="text" name="thumbnail" placeholder="Name of the file.">
         <br>
         <input type="submit" value="Enviar">
     </form>
@@ -101,9 +105,6 @@
         <br>
         <label for="category">Category:</label>
         <input type="text" name="category">
-        <br>
-        <label for="thumbnail">Thumbnail:</label>
-        <input type="text" name="thumbnail">
         <br>
         <input type="submit" value="Enviar">
     </form>
