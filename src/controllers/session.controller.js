@@ -12,6 +12,12 @@ import nodemailer from 'nodemailer'
 
 const cartService = new CartService()
 
+const mailerConfig = {
+    service: 'gmail',
+    auth: {user: "ramasilva909@gmail.com", pass: "vzpcejjwyjmeihtj" }
+}
+let transporter = nodemailer.createTransport(mailerConfig)
+
 function auth(req, res, next){
     if(req.session.user){
         return next()
@@ -193,11 +199,6 @@ const passRecovery = async(req, res)=>{
     }
     const token = Randomstring.generate()
     await PassRecoveryModel.create({email, token})
-    const mailerConfig = {
-        service: 'gmail',
-        auth: {user: "ramasilva909@gmail.com", pass: "vzpcejjwyjmeihtj" }
-    }
-    let transporter = nodemailer.createTransport(mailerConfig)
     let message = {
         from: "ramasilva909@gmail.com",
         to: email,
@@ -311,7 +312,14 @@ const deleteInactiveUsers = async(req, res)=>{
 
         for(let item of users){
             if(item.last_connection < twoDays){
-                const deletedUser = await userModel.findOneAndDelete({email: item.email})
+                let message = {
+                    from: "ramasilva909@gmail.com",
+                    to: item.email,
+                    subject: '[CODER BACKEND API] Your account was deleted',
+                    html: `<h1>[CODER BACKEND API] <h2>Your account has been deleted by an administrator due to inactivity (+2 days).</h2>`
+                }
+                await transporter.sendMail(message)
+                await userModel.findOneAndDelete({email: item.email})
             }
         }
         res.status(200).send("Inactive users deleted.")
