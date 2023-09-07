@@ -1,0 +1,122 @@
+<style>
+    .rectangulo {
+        width: 90%;
+        padding: 20px;
+        border: 1px solid black;
+        border-radius: 5px;
+    }
+
+    button {
+        padding: 10px 20px;
+        font-size: 16px;
+        background-color: #5c8bd1;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        margin: 5px;
+    }
+
+    .userFrame{
+        display: flex;
+        text-align: start;
+        padding: 10px;
+        border: 1px solid black;
+        border-radius: 5px;
+        margin: 10px 0px;
+    }
+
+    #role {
+        padding: 4px;
+        font-size: 16px;
+        background-color: yellow;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        margin: 5px;
+    }
+
+    #delete{
+        padding: 4px;
+        font-size: 16px;
+        background-color: red;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        margin: 5px;
+    }
+
+    table {
+        font-family: arial, sans-serif;
+        border-collapse: collapse;
+        width: 100%;
+    }
+
+    td, th {
+        border: 1px solid #dddddd;
+        text-align: left;
+        padding: 8px;
+    }
+
+    tr:nth-child(even) {
+        background-color: #dddddd;
+    }
+</style>
+
+<button id="btnInicio">Inicio</button>
+
+<div class="d-flex justify-content-center mt-5">
+    <div class="rectangulo">
+        <table>
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Age</th>
+                    <th>Role</th>
+                    <th>Cart ID</th>
+                    <th>Last Connection</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{#each users}}
+                <tr>
+                <td>{{this.first_name}} {{this.last_name}}</td>
+                <td>{{this.email}}</td>
+                <td>{{this.age}}</td>
+                <td>{{this.role}}</td>
+                <td>{{this.cartId}}</td>
+                <td>{{this.last_connection}}</td>
+                <td>
+                    <button id="role" data-userid={{this._id}}>Change role</button>
+                    <button id="delete" data-userid={{this._id}}>Delete</button>
+                </td>
+                </tr>
+                {{/each}}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+    const btnInicio = document.getElementById("btnInicio")
+    const btnRole = document.querySelectorAll("#role")
+    const btnDelete = document.querySelectorAll("#delete")
+
+    btnInicio.onclick = ()=>{
+        window.location.href = "/"
+    }
+
+    for(let item of btnRole){
+        item.addEventListener("click", ()=>{
+            console.log(item.dataset.userid)
+            window.location.href = `/sessions/premium/${item.dataset.userid}`
+        })
+    }
+    for(let item of btnDelete){
+        item.addEventListener("click", ()=>{
+            console.log(item.dataset.userid)
+            window.location.href = `/sessions/deleteUser/${item.dataset.userid}`
+        })
+    }
+</script>

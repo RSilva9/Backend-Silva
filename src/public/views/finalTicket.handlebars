@@ -22,7 +22,19 @@
         border: 1px solid #ccc;
         border-radius: 3px;
     }
+
+    button {
+        padding: 10px 20px;
+        font-size: 16px;
+        background-color: #5c8bd1;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        margin: 5px;
+    }
 </style>
+
+<button id="btnInicio">Inicio</button>
 
 <div class="d-flex justify-content-center mt-5">
     <div class="rectangulo">
@@ -44,3 +56,11 @@
         </div>
     </div>
 </div>
+
+<script>
+    const btnInicio = document.getElementById("btnInicio")
+
+    btnInicio.onclick = ()=>{
+        window.location.href = "/"
+    }
+</script>

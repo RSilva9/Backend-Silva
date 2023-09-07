@@ -26,6 +26,13 @@ function auth(req, res, next){
     return res.status(401).send('Authentication error.')
 }
 
+const isAdmin = async(req, res, next)=>{
+    if(req.session.user.role == "admin"){
+        return next()
+    }
+    return res.status(401).send('Authentication error.')
+}
+
 const register = async(req, res)=>{
     if(req.session.user){
         logger.warning("You are already logged in.")
@@ -245,12 +252,19 @@ const roleSwitch = async(req, res)=>{
                 for(let item of user.documents){
                     if(item.fileType == "comprobante_domicilio"){
                         await userModel.findByIdAndUpdate(uid, { role: 'premium'})
-                        req.session.user.role = "premium"
+                        if(req.session.user.email === user.email){
+                            req.session.user.role = "premium"
+                        }
                     }
                 }
             }else{
                 logger.error("User documentation insufficient.")
                 res.status(400).json({ status: 'error', error: "User documentation insufficient." })
+            }
+        }else if(user.role == "premium"){
+            await userModel.findByIdAndUpdate(uid, { role: 'usuario'})
+            if(req.session.user.email === user.email){
+                req.session.user.role = "usuario"
             }
         }
         res.redirect("/")
@@ -328,4 +342,14 @@ const deleteInactiveUsers = async(req, res)=>{
     }
 }
 
-export default { auth, register, postRegister, failRegister, login, postLogin, failLogin, githubCallback, logout, checkLogin, getCartId, current, passRecovery, verifyToken, passUpdate, roleSwitch, uploadDocuments, getAllUsers, deleteInactiveUsers}
+const deleteUser = async(req, res)=>{
+    try {
+        const uid = req.params.uid
+        const user = await userModel.findByIdAndDelete(uid)
+        res.status(200).send("User deleted.")
+    } catch (error) {
+        res.status(500).json({ status: 'error', error: error.message })
+    }
+}
+
+export default { isAdmin, auth, register, postRegister, failRegister, login, postLogin, failLogin, githubCallback, logout, checkLogin, getCartId, current, passRecovery, verifyToken, passUpdate, roleSwitch, uploadDocuments, getAllUsers, deleteInactiveUsers, deleteUser }

@@ -88,6 +88,9 @@
                 <input type="submit" id="submitButton">
             </form>
         </div>
+        {{#ifAdmin data.role}}
+            <button id="btnAdmin">Admin Panel</button>
+        {{/ifAdmin}}
         <div class="campo">
             <button id="viewDocuments">Ver documentos subidos</button>
         </div>

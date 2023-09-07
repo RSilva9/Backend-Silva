@@ -19,13 +19,6 @@ const destinationByFileType = (req, file, cb) => {
       break;
   }
 }
-//     if (file.fieldname === 'pfp') {
-//       cb(null, 'src/public/uploads/profiles')
-//     } else if (file.fieldname === 'documentos') {
-//       cb(null, 'src/public/uploads/documents')
-//     } else {
-//       cb(new Error('Invalid fieldname'))
-//     }
 
 const storage  = multer.diskStorage({
     destination: destinationByFileType,
@@ -36,7 +29,8 @@ const upload = multer({storage: storage})
 const sessionRouter = Router()
 
 sessionRouter.get('/', sessionController.getAllUsers)
-sessionRouter.get('/deleteInactiveUsers', sessionController.deleteInactiveUsers)
+sessionRouter.get('/deleteInactiveUsers', sessionController.isAdmin, sessionController.deleteInactiveUsers)
+sessionRouter.get('/deleteUser/:uid', sessionController.isAdmin, sessionController.deleteUser)
 sessionRouter.get('/register', sessionController.register)
 sessionRouter.post('/register', sessionController.postRegister)
 sessionRouter.get('/login', sessionController.login)
@@ -49,7 +43,7 @@ sessionRouter.get('/current', sessionController.current)
 sessionRouter.post('/passRecovery', sessionController.passRecovery)
 sessionRouter.get('/passReset/:token', sessionController.verifyToken)
 sessionRouter.post('/passUpdate/:user', sessionController.passUpdate)
-sessionRouter.get('/premium/:uid', sessionController.roleSwitch)
+sessionRouter.get('/premium/:uid', sessionController.isAdmin, sessionController.roleSwitch)
 sessionRouter.post('/uploadDocuments', upload.fields([
     { name: 'pfp', maxCount: 1 },
     { name: 'product', maxCount: 1 },

@@ -24,6 +24,14 @@ function isUser(req, res, next){
     return res.status(401).send('Authentication error.')
 }
 
+function isAdmin(req, res, next){
+    if(req.session.user && req.session.user.role == "admin"){
+        return next()
+    }
+    logger.error("Authentication error.")
+    return res.status(401).send('Authentication error.')
+}
+
 const viewIndex = async(req, res)=>{
     res.render('inicio')
 }
@@ -81,4 +89,9 @@ const viewDocuments = async(req, res)=>{
     }
 }
 
-export default { auth, isUser, viewIndex, viewProducts, viewCartWithId, viewProfile, viewFinalTicket, viewDocuments }
+const viewAdminPanel = async(req, res)=>{
+    const users = await userModel.find({}).lean().exec()
+    res.render('adminPanel', {users})
+}
+
+export default { auth, isUser, isAdmin, viewIndex, viewProducts, viewCartWithId, viewProfile, viewFinalTicket, viewDocuments, viewAdminPanel }

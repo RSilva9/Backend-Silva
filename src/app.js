@@ -23,7 +23,6 @@ import errorHandler from './middlewares/errors/index.js'
 import compression from 'express-compression'
 import swaggerJSDoc from 'swagger-jsdoc'
 import swaggerUI from 'swagger-ui-express'
-import { userModel } from './models/user.model.js'
 
 const productService = new ProductService()
 const cartService = new CartService()
@@ -57,6 +56,15 @@ app.set('view engine', 'handlebars')
 app.use(compression({
     brotli:{enabled:true, zlib:{}}
 }))
+
+const handelbars = handlebars.create({})
+
+handelbars.handlebars.registerHelper('ifAdmin', function (role, options) {
+    if (role === 'admin') {
+      return options.fn(this);
+    }
+    return options.inverse(this);
+});
 
 app.use('/api/docs', swaggerUI.serve, swaggerUI.setup(swaggerJSDoc(swaggerOptions)))
 app.use('/api/products', productRouter)
